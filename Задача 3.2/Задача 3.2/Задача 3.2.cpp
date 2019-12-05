@@ -14,11 +14,19 @@ void qsortArray(int* sArr, int first, int last)
 {
 	if (first < last)
 	{
-		int left = first, right = last, middle = sArr[(left + right) / 2];
+		int left = first;
+		int right = last;
+		int middle = sArr[(left + right) / 2];
 		do
 		{
-			while (sArr[left] < middle) left++;
-			while (sArr[right] > middle) right--;
+			while (sArr[left] < middle)
+			{
+				left++;
+			}
+			while (sArr[right] > middle)
+			{
+				right--;
+			}
 			if (left <= right)
 			{
 				int tmp = sArr[left];
@@ -27,7 +35,8 @@ void qsortArray(int* sArr, int first, int last)
 				left++;
 				right--;
 			}
-		} while (left <= right);
+		} 
+		while (left <= right);
 		qsortArray(sArr, first, right);
 		qsortArray(sArr, left, last);
 	}
