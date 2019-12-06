@@ -11,12 +11,7 @@ struct person
 	char name[100];
 };
 
-person people[100];
-
-void exit(FILE* file_ptr)
-{
-	fclose(file_ptr);
-}
+person people[100] = {};
 
 void addNum(char* num)
 {
@@ -35,10 +30,10 @@ int addPerson(int personNum)
 	char name[100], num[100];
 	addName(name);
 	addNum(num);
-	person personVal;
-	strcpy(personVal.name, name);
-	strcpy(personVal.num, num);
-	people[personNum] = personVal;
+	person people[personSchetchic];
+	strcpy(people[personSchetchic].name, name);
+	strcpy(people[personSchetchic].num, num);
+	people[personNum] = people[personSchetchic];
 	printf("\nКонтакт успешно добавлен\n");
 	return personNum + 1;
 }
@@ -90,22 +85,22 @@ void numSearch(char personName)
 	for (int i = 0; i < personName; i++)
 	{
 		bool equal = true;
-		person personVal = people[i];
-		int sizePersonNum = strlen(personVal.num);
+		person people[personSchetchic] = people[i];
+		int sizePersonNum = strlen(people[personSchetchic].num);
 		if (sizePersonNum != strSizeFinder)
 		{
 			continue;
 		}
 		for (int j = 0; j < strSizeFinder; j++)
 		{
-			if (nameFinder[j] != personVal.num[j])
+			if (nameFinder[j] != people[personSchetchic].num[j])
 			{
 				equal = false;
 			}
 		}
 		if (equal)
 		{
-			printf("%s\t%s\n", personVal.name, personVal.num);
+			printf("%s\t%s\n", people[personSchetchic].name, people[personSchetchic].num);
 			return;
 		}
 	}
@@ -126,22 +121,22 @@ void nameSearch(int personNum)
 	for (int i = 0; i < personNum; i++)
 	{
 		bool equal = true;
-		person personVal = people[i];
-		int sizePersonName = strlen(personVal.name);
+		person people[personSchetchic] = people[i];
+		int sizePersonName = strlen(people[personSchetchic].name);
 		if (sizePersonName != strSizeFinder)
 		{
 			continue;
 		}
 		for (int j = 0; j < strSizeFinder; j++)
 		{
-			if (numFinder[j] != personVal.name[j])
+			if (numFinder[j] != people[personSchetchic].name[j])
 			{
 				equal = false;
 			}
 		}
 		if (equal)
 		{
-			printf("%s\t%s\n", personVal.name, personVal.num);
+			printf("%s\t%s\n", people[personSchetchic].name, people[personSchetchic].num);
 			return;
 		}
 	}
@@ -153,18 +148,16 @@ int load()
 	int personSchetchic = 0;
 	FILE* file_ptr;
 	int i = 0;
-	if ((file_ptr = fopen("file_ptr.txt", "a+t")) == NULL)
+	if ((file_ptr = fopen("file_ptr.txt", "r")) == NULL)
 	{
 		printf("error\n");
 	}
-	char name[100], num[100];
-	while (fgets(name, 100, file_ptr))
+	char name[100];
+	char num[100];
+	while (fscanf(file_ptr, "%[^ ]%*c", people[personSchetchic].name) != EOF);
 	{
-		person personVal;
-		fgets(num, 100, file_ptr);
-		strcpy(personVal.name, name);
-		strcpy(personVal.num, num);
-		people[personSchetchic] = personVal;
+		person people[personSchetchic];
+		fscanf(file_ptr, "%[^\n]%*c", people[personSchetchic].num);
 		personSchetchic++;
 	}
 	return personSchetchic;
@@ -184,11 +177,10 @@ int main()
 		{
 			printf("\nВызов инструкции осуществляется по номеру 6\nВведите номер команды: ");
 		}
-
 		scanf("%c", &act);
 		switch (act)
 		{
-			case '0': {exit(file_ptr); return 0;}
+			case '0': {fclose(file_ptr); return 0;}
 			case '1': {schetchic = addPerson(schetchic);break;}
 			case '2': {Print(file_ptr);break;}
 			case '3': {numSearch(schetchic);break;}
@@ -197,7 +189,6 @@ int main()
 			case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти телефон по имени\n 4 - найти имя по телефону \n 5 - сохранить текущие данные в файл \n");break;}
 			case '\n': {break;}
 			default: {printf("Я не знаю такой команды, вызовите инструкцию\n");}
-
 		}
 	}
 	fclose(file_ptr);
