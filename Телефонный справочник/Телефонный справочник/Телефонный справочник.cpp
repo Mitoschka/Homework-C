@@ -153,7 +153,7 @@ int load()
 	int personSchetchic = 0;
 	FILE* file_ptr;
 	int i = 0;
-	if ((file_ptr = fopen("file_ptr.txt", "r")) == NULL)
+	if ((file_ptr = fopen("file_ptr.txt", "a+t")) == NULL)
 	{
 		printf("error\n");
 	}
