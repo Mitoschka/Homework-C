@@ -1,74 +1,78 @@
 ﻿#include <stdlib.h>
 #include <stdio.h>
 
-void generationArray(int* massif, int size)
+void generationArray(int* array, int size)
 {
 	for (int i = 0; size > i; ++i)
 	{
-		massif[i] = rand() % 20004 - 10000;
-		printf("%d, ", massif[i]);
+		array[i] = rand() % 20004 - 10000;
+		printf("%d, ", array[i]);
 	}
 }
 
-void qsortArray(int* sArr, int first, int last)
+void qsortArray(int* supportingElement, int first, int last)
 {
 	if (first < last)
 	{
 		int left = first;
 		int right = last;
-		int middle = sArr[(left + right) / 2];
+		int middle = supportingElement[(left + right) / 2];
 		do
 		{
-			while (sArr[left] < middle)
+			while (supportingElement[left] < middle)
 			{
 				left++;
 			}
-			while (sArr[right] > middle)
+			while (supportingElement[right] > middle)
 			{
 				right--;
 			}
 			if (left <= right)
 			{
-				int tmp = sArr[left];
-				sArr[left] = sArr[right];
-				sArr[right] = tmp;
+				int tmp = supportingElement[left];
+				supportingElement[left] = supportingElement[right];
+				supportingElement[right] = tmp;
 				left++;
 				right--;
 			}
 		} 
 		while (left <= right);
-		qsortArray(sArr, first, right);
-		qsortArray(sArr, left, last);
+		qsortArray(supportingElement, first, right);
+		qsortArray(supportingElement, left, last);
 	}
 }
 
-void arraySorting(int* massif, int size)
+void arraySorting(int* array, int size)
 {
-	generationArray(massif, size);
-	qsortArray(massif, 0, size - 1);
+	generationArray(array, size);
+	qsortArray(array, 0, size - 1);
 	printf("\n\nSorted array:\n");
 	for (int i = 0; i < size; i++)
 	{
-		printf("%d ", massif[i]);
+		printf("%d ", array[i]);
 	}
 }
 
-int binarySearch(int a, int mass[], int n)
+int binarySearch(int a, int mass[], int supportElement)
 {
-	int low = 0; 
-	int high = 0; 
-	int middle = 0;
-	low = 0;
-	high = n - 1;
+	int high = 0;
+	high = supportElement - 1;
+	int low = 0;
 	while (low <= high)
 	{
-		middle = (low + high) / 2;
+		int middle = (low + high) / 2;
 		if (a < mass[middle])
+		{
 			high = middle - 1;
+		}
 		else if (a > mass[middle])
+		{
 			low = middle + 1;
+		}
 		else
+		{
 			return middle;
+		}
 	}
 	return -1;
 }
@@ -79,37 +83,36 @@ int finding()
 	int number = 0;
 	printf("Enter the size of the array: ");
 	scanf("%d", &size);
-	int* massif = new int[size];
-	arraySorting(massif, size);
+	int* array = new int[size];
+	arraySorting(array, size);
 	printf("\n\nEnter the desired element: ");
 	scanf("%d", &number);
-	int result = binarySearch(number, massif, size);
-	delete[] massif;
+	int result = binarySearch(number, array, size);
+	delete[] array;
 	return result;
 }
 
-
-void ResultOfFinding()
+void resultOfFinding()
 {
-	int position = 0;
-	position = finding();
+ 	int position = finding();
 	if (position != -1)
 	{
 		printf("\n\nThe element  found!\npostion: %d\n\n",position);
 	}
 	else
+	{
 		printf("\n\nThe element isn't found!\n\n");
+	}
 }
 
-bool test(int len, int massif[], int sortedArray[])
+bool test(int len, int array[], int sortedArray[])
 {
-	qsortArray(massif, 0, len - 1);
+	qsortArray(array, 0, len - 1);
 	for (int i = 0; i < len; ++i)
 	{
-		if (massif[i] != sortedArray[i])
+		if (array[i] != sortedArray[i])
 		{
 			return false;
-
 		}
 	}
 	return true;
@@ -146,7 +149,7 @@ int main()
 		printf("Error");
 		return 1;
 	}
-	ResultOfFinding();
-	ResultOfFinding();
+	resultOfFinding();
+	resultOfFinding();
 	return 0;
 }
