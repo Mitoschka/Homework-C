@@ -27,7 +27,7 @@ void binarySupplementedCode(int* mass)
 		mass[i] = 1 - mass[i];
 	}
 	int addition = 1;
-	for (int i = 0;i < size;i++)
+	for (int i = 0; i < size; i++)
 	{
 		mass[i] = (mass[i] + addition) & 1;
 		if (mass[i] == 1)
