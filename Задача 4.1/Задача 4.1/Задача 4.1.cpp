@@ -54,7 +54,7 @@ int makeDecimal(int* bin)
 	{
 		powerTwo[i] = powerTwo[i - 1] * 2;
 	}
-	for (int i = 0; i < size;i++)
+	for (int i = 0; i < size; i++)
 	{
 		res += powerTwo[i] * bin[i];
 	}
@@ -110,7 +110,7 @@ bool testBinarySum(int* binaryNum1, int* binaryNum2, int* testArray)
 
 bool testMakeBinary(int a, int* testArray)
 {
-	int * resArray = new int[size]();
+	int* resArray = new int[size]();
 	makeBinary(a, resArray);
 	for (int i = 0; i < size; i++)
 	{
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
 	if (!test())
 	{
 		printf("Error");
-		//return 1;
+		return 1;
 	}
 	int* binaryNum1 = new int[size]();
 	enterNumber(binaryNum1);
