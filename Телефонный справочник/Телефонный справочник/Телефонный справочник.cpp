@@ -193,7 +193,8 @@ int load(person* people)
 bool nameSearchTest(int personNum, char* numFinder, person* test)
 {
 	person* res = nameSearch(personNum, numFinder, test);
-	for (int i = 0; i <= 100; i++)
+	int n = strlen(numFinder);
+	for (int i = 0; i <= n; i++)
 	{
 		if (numFinder[i] != res->name[i])
 		{
@@ -206,7 +207,8 @@ bool nameSearchTest(int personNum, char* numFinder, person* test)
 bool numSearchTest(int personName, char* nameFinder, person* test)
 {
 	person* res = numSearch(personName, nameFinder,test);
-	for (int i = 0; i <= 100; i++)
+	int n = strlen(nameFinder);
+	for (int i = 0; i <= n; i++)
 	{
 		if (nameFinder[i] != res->num[i])
 		{
@@ -219,7 +221,7 @@ bool numSearchTest(int personName, char* nameFinder, person* test)
 int main()
 {
 	person peopleTest1[2] = {{"qw","435345"}, {"sdfsd","436564" }};
-	char numTestFinder[] = { "sdfsd" };
+	char numTestFinder[] = "sdfsd";
 	if (!numSearchTest(2, numTestFinder, peopleTest1))
 	{
 		printf("Error");
@@ -227,7 +229,7 @@ int main()
 	}
 
 	person peopleTest2[2] = { {"qw","435345"}, {"sdfsd","436564" } };
-	char nameTestFinder[] = { "435345" };
+	char nameTestFinder[] = "436564";
 	if (!nameSearchTest(2, nameTestFinder, peopleTest2))
 	{
 		printf("Error");
