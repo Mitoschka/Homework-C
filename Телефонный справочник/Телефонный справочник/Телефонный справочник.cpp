@@ -11,7 +11,12 @@ struct person
 	char name[100];
 };
 
-person people[100] = {};
+person people[100];
+
+void exit(FILE* file_ptr)
+{
+	fclose(file_ptr);
+}
 
 void addNum(char* num)
 {
@@ -30,14 +35,13 @@ int addPerson(int personNum)
 	char name[100], num[100];
 	addName(name);
 	addNum(num);
-	person people[personSchetchic];
-	strcpy(people[personSchetchic].name, name);
-	strcpy(people[personSchetchic].num, num);
-	people[personNum] = people[personSchetchic];
+	person personVal;
+	strcpy(personVal.name, name);
+	strcpy(personVal.num, num);
+	people[personNum] = personVal;
 	printf("\nКонтакт успешно добавлен\n");
 	return personNum + 1;
 }
-
 
 void saveNote(int peopleSchetchic)
 {
@@ -50,7 +54,7 @@ void saveNote(int peopleSchetchic)
 	{
 		for (int i = 0; i < peopleSchetchic; i++)
 		{
-			fprintf(file_ptr,"%s\t%s\n", people[i].name, people[i].num);
+			fprintf(file_ptr, "%s\t%s\n", people[i].name, people[i].num);
 		}
 	}
 	fclose(file_ptr);
@@ -85,22 +89,22 @@ void numSearch(char personName)
 	for (int i = 0; i < personName; i++)
 	{
 		bool equal = true;
-		person people[personSchetchic] = people[i];
-		int sizePersonNum = strlen(people[personSchetchic].num);
+		person personVal = people[i];
+		int sizePersonNum = strlen(personVal.num);
 		if (sizePersonNum != strSizeFinder)
 		{
 			continue;
 		}
 		for (int j = 0; j < strSizeFinder; j++)
 		{
-			if (nameFinder[j] != people[personSchetchic].num[j])
+			if (nameFinder[j] != personVal.num[j])
 			{
 				equal = false;
 			}
 		}
 		if (equal)
 		{
-			printf("%s\t%s\n", people[personSchetchic].name, people[personSchetchic].num);
+			printf("%s\t%s\n", personVal.name, personVal.num);
 			return;
 		}
 	}
@@ -121,22 +125,22 @@ void nameSearch(int personNum)
 	for (int i = 0; i < personNum; i++)
 	{
 		bool equal = true;
-		person people[personSchetchic] = people[i];
-		int sizePersonName = strlen(people[personSchetchic].name);
+		person personVal = people[i];
+		int sizePersonName = strlen(personVal.name);
 		if (sizePersonName != strSizeFinder)
 		{
 			continue;
 		}
 		for (int j = 0; j < strSizeFinder; j++)
 		{
-			if (numFinder[j] != people[personSchetchic].name[j])
+			if (numFinder[j] != personVal.name[j])
 			{
 				equal = false;
 			}
 		}
 		if (equal)
 		{
-			printf("%s\t%s\n", people[personSchetchic].name, people[personSchetchic].num);
+			printf("%s\t%s\n", personVal.name, personVal.num);
 			return;
 		}
 	}
@@ -150,14 +154,19 @@ int load()
 	int i = 0;
 	if ((file_ptr = fopen("file_ptr.txt", "r")) == NULL)
 	{
-		printf("error\n");
+		file_ptr = fopen("file_prt.txt", "w");
+		fclose(file_ptr);
+		file_ptr = fopen("file_ptr.txt", "r");
 	}
 	char name[100];
 	char num[100];
-	while (fscanf(file_ptr, "%[^ ]%*c", people[personSchetchic].name) != EOF);
+	while (fscanf(file_ptr, "%s", name) != EOF)
 	{
-		person people[personSchetchic];
-		fscanf(file_ptr, "%[^\n]%*c", people[personSchetchic].num);
+		person personVal;
+		fscanf(file_ptr, "%s", num);
+		strcpy(personVal.name, name);
+		strcpy(personVal.num, num);
+		people[personSchetchic] = personVal;
 		personSchetchic++;
 	}
 	return personSchetchic;
@@ -180,20 +189,17 @@ int main()
 		scanf("%c", &act);
 		switch (act)
 		{
-			case '0': {fclose(file_ptr); return 0;}
-			case '1': {schetchic = addPerson(schetchic);break;}
-			case '2': {Print(file_ptr);break;}
-			case '3': {numSearch(schetchic);break;}
-			case '4': {nameSearch(schetchic);break;}
-			case '5': {saveNote(schetchic);break;}
-			case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти телефон по имени\n 4 - найти имя по телефону \n 5 - сохранить текущие данные в файл \n");break;}
-			case '\n': {break;}
-			default: {printf("Я не знаю такой команды, вызовите инструкцию\n");}
+		case '0': {exit(file_ptr); return 0;}
+		case '1': {schetchic = addPerson(schetchic);break;}
+		case '2': {Print(file_ptr);break;}
+		case '3': {numSearch(schetchic);break;}
+		case '4': {nameSearch(schetchic);break;}
+		case '5': {saveNote(schetchic);break;}
+		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти телефон по имени\n 4 - найти имя по телефону \n 5 - сохранить текущие данные в файл \n");break;}
+		case '\n': {break;}
+		default: {printf("Я не знаю такой команды, вызовите инструкцию\n");}
 		}
 	}
 	fclose(file_ptr);
 	return 0;
 }
-
-
-
