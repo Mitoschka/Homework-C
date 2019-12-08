@@ -218,17 +218,17 @@ bool numSearchTest(int personName, char* nameFinder, person* test)
 
 int main()
 {
-	person peopleTest[2] = {{"qw","435345"}, {"sdfsd","436564" }};
+	person peopleTest1[2] = {{"qw","435345"}, {"sdfsd","436564" }};
 	char numTestFinder[] = { "sdfsd" };
-	if (!numSearchTest(2, numTestFinder, peopleTest))
+	if (!numSearchTest(2, numTestFinder, peopleTest1))
 	{
 		printf("Error");
 		return 1;
 	}
 
-	person peopleTest[2] = { {"qw","435345"}, {"sdfsd","436564" } };
+	person peopleTest2[2] = { {"qw","435345"}, {"sdfsd","436564" } };
 	char nameTestFinder[] = { "435345" };
-	if (!nameSearchTest(2, nameTestFinder, peopleTest))
+	if (!nameSearchTest(2, nameTestFinder, peopleTest2))
 	{
 		printf("Error");
 		return 1;
