@@ -20,36 +20,13 @@ void showBinaryNumber(int* bin)
 	printf("\n");
 }
 
-void binarySupplementedCode(int* mass)
-{
-	for (int i = size - 1; i >= 0; i--)
-	{
-		mass[i] = 1 - mass[i];
-	}
-	int addition = 1;
-	for (int i = 0; i < size; i++)
-	{
-		mass[i] = (mass[i] + addition) & 1;
-		if (mass[i] == 1)
-		{
-			addition = 0;
-		}
-	}
-}
-
 void makeBinary(int a, int* res)
 {
+	int x = 0;
 	bool isNegative = a < 0;
-	int i = 0;
-	while (abs(a) > 0)
+	for (int i =0; i < size; i++)
 	{
-		res[i] = abs(a) & 1;
-		a = a / 2;
-		i++;
-	}
-	if (isNegative)
-	{
-		binarySupplementedCode(res);
+		res[i] = (a >> i) & 1;
 	}
 }
 int makeDecimal(int* bin)
@@ -167,7 +144,7 @@ int main(int argc, char* argv[])
 	if (!test())
 	{
 		printf("Error");
-		return 1;
+		//return 1;
 	}
 	int* binaryNum1 = new int[size]();
 	enterNumber(binaryNum1);
