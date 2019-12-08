@@ -11,8 +11,6 @@ struct person
 	char name[100];
 };
 
-person people[100];
-
 void exit(FILE* file_ptr)
 {
 	fclose(file_ptr);
@@ -30,7 +28,7 @@ void addName(char* name)
 	scanf("%s", name);
 }
 
-int addPerson(int personNum)
+int addPerson(int personNum, person* people)
 {
 	char name[100], num[100];
 	addName(name);
@@ -43,7 +41,7 @@ int addPerson(int personNum)
 	return personNum + 1;
 }
 
-void saveNote(int peopleSchetchic)
+void saveNote(int peopleSchetchic, person* people)
 {
 	FILE* file_ptr;
 	if ((file_ptr = fopen("file_ptr.txt", "w")) == NULL)
@@ -80,11 +78,8 @@ void Print(FILE* file_ptr)
 	printf("Все данные были распечатаны\n");
 }
 
-void numSearch(char personName)
+person* numSearch(char personName, char* nameFinder, person* people)
 {
-	char nameFinder[100];
-	printf("Введите номер контакта: ");
-	scanf("%s", nameFinder);
 	int strSizeFinder = strlen(nameFinder);
 	for (int i = 0; i < personName; i++)
 	{
@@ -104,11 +99,24 @@ void numSearch(char personName)
 		}
 		if (equal)
 		{
-			printf("%s\t%s\n", personVal.name, personVal.num);
-			return;
+			return &people[i];
 		}
 	}
-	printf("Увы, такого контакта здесь нет\n");
+	return nullptr;
+}
+
+void printNumSearch(char personName, person* people)
+{
+	char nameFinder[100];
+	printf("Введите номер контакта: ");
+	scanf("%s", nameFinder);
+	person* personVal = numSearch(personName, nameFinder, people);
+	if (personVal == nullptr)
+	{
+		printf("Увы, такого контакта здесь нет\n");
+		return;
+	}
+	printf("%s\t%s\n", personVal->name, personVal->num);
 }
 
 int min(int x, int y)
@@ -116,11 +124,8 @@ int min(int x, int y)
 	return x > y ? y : x;
 }
 
-void nameSearch(int personNum)
+person* nameSearch(int personNum, char* numFinder, person* people)
 {
-	char numFinder[100];
-	printf("Введите имя контакта: ");
-	scanf("%s", numFinder);
 	int strSizeFinder = strlen(numFinder);
 	for (int i = 0; i < personNum; i++)
 	{
@@ -140,14 +145,27 @@ void nameSearch(int personNum)
 		}
 		if (equal)
 		{
-			printf("%s\t%s\n", personVal.name, personVal.num);
-			return;
+			return &people[i];
 		}
 	}
-	printf("Увы, такого контакта здесь нет\n");
+	return nullptr;
 }
 
-int load()
+void printNameSearch(int personNum, person* people)
+{
+	char numFinder[100];
+	printf("Введите имя контакта: ");
+	scanf("%s", numFinder);
+	person* personVal = nameSearch(personNum, numFinder, people);
+	if (personVal == nullptr)
+	{
+		printf("Увы, такого контакта здесь нет\n");
+		return;
+	}
+	printf("%s\t%s\n", personVal->name, personVal->num);
+}
+
+int load(person* people)
 {
 	int personSchetchic = 0;
 	FILE* file_ptr;
@@ -172,13 +190,56 @@ int load()
 	return personSchetchic;
 }
 
+bool nameSearchTest(int personNum, char* numFinder, person* test)
+{
+	person* res = nameSearch(personNum, numFinder, test);
+	for (int i = 0; i <= 100; i++)
+	{
+		if (numFinder[i] != res->name[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool numSearchTest(int personName, char* nameFinder, person* test)
+{
+	person* res = numSearch(personName, nameFinder,test);
+	for (int i = 0; i <= 100; i++)
+	{
+		if (nameFinder[i] != res->num[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 int main()
 {
+	person peopleTest[2] = {{"qw","435345"}, {"sdfsd","436564" }};
+	char numTestFinder[] = { "sdfsd" };
+	if (!numSearchTest(2, numTestFinder, peopleTest))
+	{
+		printf("Error");
+		return 1;
+	}
+
+	person peopleTest[2] = { {"qw","435345"}, {"sdfsd","436564" } };
+	char nameTestFinder[] = { "435345" };
+	if (!nameSearchTest(2, nameTestFinder, peopleTest))
+	{
+		printf("Error");
+		return 1;
+	}
+
+	person people[100];
 	FILE* file_ptr;
 	file_ptr = fopen("file_ptr.txt", "r+t");
 	setlocale(LC_ALL, "Russian");
 	printf("Это телефонный справочник\n");
-	int schetchic = load();
+	int schetchic = load(people);
 	char act = '0';
 	while (true)
 	{
@@ -190,12 +251,12 @@ int main()
 		switch (act)
 		{
 		case '0': {exit(file_ptr); return 0;}
-		case '1': {schetchic = addPerson(schetchic);break;}
+		case '1': {schetchic = addPerson(schetchic,people);break;}
 		case '2': {Print(file_ptr);break;}
-		case '3': {numSearch(schetchic);break;}
-		case '4': {nameSearch(schetchic);break;}
-		case '5': {saveNote(schetchic);break;}
-		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти телефон по имени\n 4 - найти имя по телефону \n 5 - сохранить текущие данные в файл \n");break;}
+		case '3': {printNumSearch(schetchic, people);break;}
+		case '4': {printNameSearch(schetchic, people);break;}
+		case '5': {saveNote(schetchic, people);break;}
+		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти телефон по номеру\n 4 - найти номер по телефону \n 5 - сохранить текущие данные в файл \n");break;}
 		case '\n': {break;}
 		default: {printf("Я не знаю такой команды, вызовите инструкцию\n");}
 		}
