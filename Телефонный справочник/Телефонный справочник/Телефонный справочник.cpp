@@ -154,7 +154,7 @@ int load()
 	int i = 0;
 	if ((file_ptr = fopen("file_ptr.txt", "r")) == NULL)
 	{
-		file_ptr = fopen("file_prt.txt", "w");
+		file_ptr = fopen("file_ptr.txt", "w");
 		fclose(file_ptr);
 		file_ptr = fopen("file_ptr.txt", "r");
 	}
