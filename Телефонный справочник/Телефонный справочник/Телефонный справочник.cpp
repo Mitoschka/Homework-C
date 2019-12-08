@@ -11,9 +11,9 @@ struct person
 	char name[100];
 };
 
-void exit(FILE* file_ptr)
+void exit(FILE* Phonebook)
 {
-	fclose(file_ptr);
+	fclose(Phonebook);
 }
 
 void addNum(char* num)
@@ -30,7 +30,8 @@ void addName(char* name)
 
 int addPerson(int personNum, person* people)
 {
-	char name[100], num[100];
+	char name[100];
+	char num[100];
 	addName(name);
 	addNum(num);
 	person personVal;
@@ -43,8 +44,8 @@ int addPerson(int personNum, person* people)
 
 void saveNote(int peopleSchetchic, person* people)
 {
-	FILE* file_ptr;
-	if ((file_ptr = fopen("file_ptr.txt", "w")) == NULL)
+	FILE* Phonebook;
+	if ((Phonebook = fopen("Phonebook.txt", "w")) == NULL)
 	{
 		printf("error\n");
 	}
@@ -52,29 +53,29 @@ void saveNote(int peopleSchetchic, person* people)
 	{
 		for (int i = 0; i < peopleSchetchic; i++)
 		{
-			fprintf(file_ptr, "%s\t%s\n", people[i].name, people[i].num);
+			fprintf(Phonebook, "%s\t%s\n", people[i].name, people[i].num);
 		}
 	}
-	fclose(file_ptr);
+	fclose(Phonebook);
 	printf("\n\nСохранение прошло успешно \n");
 }
 
-void Print(FILE* file_ptr)
+void Print(FILE* Phonebook)
 {
 	char s[100];
 	int k = 0;
-	if ((file_ptr = fopen("file_ptr.txt", "r")) == NULL)
+	if ((Phonebook = fopen("Phonebook.txt", "r")) == NULL)
 	{
 		printf("error\n");
 	}
 	else
-		while (fgets(s, 100, file_ptr))
+		while (fgets(s, 100, Phonebook))
 		{
 			printf("%s", s);
 			k++;
 		}
 	printf("Количество строк: %d\n", k);
-	fclose(file_ptr);
+	fclose(Phonebook);
 	printf("Все данные были распечатаны\n");
 }
 
@@ -113,7 +114,7 @@ void printNumSearch(char personName, person* people)
 	person* personVal = numSearch(personName, nameFinder, people);
 	if (personVal == nullptr)
 	{
-		printf("Увы, такого контакта здесь нет\n");
+		printf("\nУвы, такого контакта здесь нет\n");
 		return;
 	}
 	printf("%s\t%s\n", personVal->name, personVal->num);
@@ -168,20 +169,20 @@ void printNameSearch(int personNum, person* people)
 int load(person* people)
 {
 	int personSchetchic = 0;
-	FILE* file_ptr;
+	FILE* Phonebook;
 	int i = 0;
-	if ((file_ptr = fopen("file_ptr.txt", "r")) == NULL)
+	if ((Phonebook = fopen("Phonebook.txt", "r")) == NULL)
 	{
-		file_ptr = fopen("file_ptr.txt", "w");
-		fclose(file_ptr);
-		file_ptr = fopen("file_ptr.txt", "r");
+		Phonebook = fopen("Phonebook.txt", "w");
+		fclose(Phonebook);
+		Phonebook = fopen("Phonebook.txt", "r");
 	}
 	char name[100];
 	char num[100];
-	while (fscanf(file_ptr, "%s", name) != EOF)
+	while (fscanf(Phonebook, "%s", name) != EOF)
 	{
 		person personVal;
-		fscanf(file_ptr, "%s", num);
+		fscanf(Phonebook, "%s", num);
 		strcpy(personVal.name, name);
 		strcpy(personVal.num, num);
 		people[personSchetchic] = personVal;
@@ -237,8 +238,8 @@ int main()
 	}
 
 	person people[100];
-	FILE* file_ptr;
-	file_ptr = fopen("file_ptr.txt", "r+t");
+	FILE* Phonebook;
+	Phonebook = fopen("Phonebook.txt", "r+t");
 	setlocale(LC_ALL, "Russian");
 	printf("Это телефонный справочник\n");
 	int schetchic = load(people);
@@ -252,17 +253,17 @@ int main()
 		scanf("%c", &act);
 		switch (act)
 		{
-		case '0': {exit(file_ptr); return 0;}
+		case '0': {exit(Phonebook); return 0;}
 		case '1': {schetchic = addPerson(schetchic,people);break;}
-		case '2': {Print(file_ptr);break;}
+		case '2': {Print(Phonebook);break;}
 		case '3': {printNumSearch(schetchic, people);break;}
 		case '4': {printNameSearch(schetchic, people);break;}
 		case '5': {saveNote(schetchic, people);break;}
-		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти телефон по номеру\n 4 - найти номер по телефону \n 5 - сохранить текущие данные в файл \n");break;}
+		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти имя по телефону \n 4 - найти телефон по имени \n 5 - сохранить текущие данные в файл \n");break;}
 		case '\n': {break;}
 		default: {printf("Я не знаю такой команды, вызовите инструкцию\n");}
 		}
 	}
-	fclose(file_ptr);
+	fclose(Phonebook);
 	return 0;
 }
