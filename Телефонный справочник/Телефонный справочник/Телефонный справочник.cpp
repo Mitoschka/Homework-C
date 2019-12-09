@@ -5,15 +5,15 @@
 
 int const size = 100;
 
-struct person
+struct Person
 {
 	char num[100];
 	char name[100];
 };
 
-void exit(FILE* Phonebook)
+void exit(FILE* phonebook)
 {
-	fclose(Phonebook);
+	fclose(phonebook);
 }
 
 void addNum(char* num)
@@ -28,64 +28,62 @@ void addName(char* name)
 	scanf("%s", name);
 }
 
-int addPerson(int personNum, person* people)
+int addPerson(int personNum, Person* people)
 {
-	char name[100];
-	char num[100];
-	addName(name);
-	addNum(num);
-	person personVal;
-	strcpy(personVal.name, name);
-	strcpy(personVal.num, num);
+	Person personVal;
+	addName(personVal.name);
+	addNum(personVal.num);
 	people[personNum] = personVal;
 	printf("\nКонтакт успешно добавлен\n");
 	return personNum + 1;
 }
 
-void saveNote(int peopleSchetchic, person* people)
+void saveNote(int peopleCounter, Person* people)
 {
-	FILE* Phonebook;
-	if ((Phonebook = fopen("Phonebook.txt", "w")) == NULL)
+	FILE* phonebook = fopen("Phonebook.txt", "w");
+	if (phonebook == nullptr)
 	{
 		printf("error\n");
 	}
 	else
 	{
-		for (int i = 0; i < peopleSchetchic; i++)
+		for (int i = 0; i < peopleCounter; i++)
 		{
-			fprintf(Phonebook, "%s\t%s\n", people[i].name, people[i].num);
+			fprintf(phonebook, "%s\t%s\n", people[i].name, people[i].num);
 		}
 	}
-	fclose(Phonebook);
+	fclose(phonebook);
 	printf("\n\nСохранение прошло успешно \n");
 }
 
-void Print(FILE* Phonebook)
+void Print(FILE* phonebook)
 {
 	char s[100];
 	int k = 0;
-	if ((Phonebook = fopen("Phonebook.txt", "r")) == NULL)
+	if ((phonebook = fopen("Phonebook.txt", "r")) == nullptr)
 	{
 		printf("error\n");
 	}
 	else
-		while (fgets(s, 100, Phonebook))
+	{
+		while (fgets(s, 100, phonebook))
 		{
 			printf("%s", s);
 			k++;
 		}
+	}
 	printf("Количество строк: %d\n", k);
-	fclose(Phonebook);
+	fclose(phonebook);
 	printf("Все данные были распечатаны\n");
 }
 
-person* numSearch(char personName, char* nameFinder, person* people)
+Person* numSearch(char personName, char* nameFinder, Person* people)
 {
 	int strSizeFinder = strlen(nameFinder);
 	for (int i = 0; i < personName; i++)
 	{
 		bool equal = true;
-		person personVal = people[i];
+		Person personVal = people[i];
 		int sizePersonNum = strlen(personVal.num);
 		if (sizePersonNum != strSizeFinder)
 		{
@@ -106,12 +104,12 @@ person* numSearch(char personName, char* nameFinder, person* people)
 	return nullptr;
 }
 
-void printNumSearch(char personName, person* people)
+void printNumSearch(char personName, Person* people)
 {
 	char nameFinder[100];
 	printf("Введите номер контакта: ");
 	scanf("%s", nameFinder);
-	person* personVal = numSearch(personName, nameFinder, people);
+	Person* personVal = numSearch(personName, nameFinder, people);
 	if (personVal == nullptr)
 	{
 		printf("\nУвы, такого контакта здесь нет\n");
@@ -125,13 +123,13 @@ int min(int x, int y)
 	return x > y ? y : x;
 }
 
-person* nameSearch(int personNum, char* numFinder, person* people)
+Person* nameSearch(int personNum, char* numFinder, Person* people)
 {
 	int strSizeFinder = strlen(numFinder);
 	for (int i = 0; i < personNum; i++)
 	{
 		bool equal = true;
-		person personVal = people[i];
+		Person personVal = people[i];
 		int sizePersonName = strlen(personVal.name);
 		if (sizePersonName != strSizeFinder)
 		{
@@ -152,12 +150,12 @@ person* nameSearch(int personNum, char* numFinder, person* people)
 	return nullptr;
 }
 
-void printNameSearch(int personNum, person* people)
+void printNameSearch(int personNum, Person* people)
 {
 	char numFinder[100];
 	printf("Введите имя контакта: ");
 	scanf("%s", numFinder);
-	person* personVal = nameSearch(personNum, numFinder, people);
+	Person* personVal = nameSearch(personNum, numFinder, people);
 	if (personVal == nullptr)
 	{
 		printf("Увы, такого контакта здесь нет\n");
@@ -166,34 +164,34 @@ void printNameSearch(int personNum, person* people)
 	printf("%s\t%s\n", personVal->name, personVal->num);
 }
 
-int load(person* people)
+int load(Person* people)
 {
-	int personSchetchic = 0;
-	FILE* Phonebook;
+	int personCounter = 0;
+	FILE* phonebook = fopen("Phonebook.txt", "r");
 	int i = 0;
-	if ((Phonebook = fopen("Phonebook.txt", "r")) == NULL)
+	if (phonebook == nullptr)
 	{
-		Phonebook = fopen("Phonebook.txt", "w");
-		fclose(Phonebook);
-		Phonebook = fopen("Phonebook.txt", "r");
+		phonebook = fopen("Phonebook.txt", "w");
+		fclose(phonebook);
+		phonebook = fopen("Phonebook.txt", "r");
 	}
 	char name[100];
 	char num[100];
-	while (fscanf(Phonebook, "%s", name) != EOF)
+	while (fscanf(phonebook, "%s", name) != EOF)
 	{
-		person personVal;
-		fscanf(Phonebook, "%s", num);
+		Person personVal;
+		fscanf(phonebook, "%s", num);
 		strcpy(personVal.name, name);
 		strcpy(personVal.num, num);
-		people[personSchetchic] = personVal;
-		personSchetchic++;
+		people[personCounter] = personVal;
+		personCounter++;
 	}
-	return personSchetchic;
+	return personCounter;
 }
 
-bool nameSearchTest(int personNum, char* numFinder, person* test)
+bool nameSearchTest(int personNum, char* numFinder, Person* test)
 {
-	person* res = nameSearch(personNum, numFinder, test);
+	Person* res = nameSearch(personNum, numFinder, test);
 	int n = strlen(numFinder);
 	for (int i = 0; i <= n; i++)
 	{
@@ -205,9 +203,9 @@ bool nameSearchTest(int personNum, char* numFinder, person* test)
 	return true;
 }
 
-bool numSearchTest(int personName, char* nameFinder, person* test)
+bool numSearchTest(int personName, char* nameFinder, Person* test)
 {
-	person* res = numSearch(personName, nameFinder,test);
+	Person* res = numSearch(personName, nameFinder,test);
 	int n = strlen(nameFinder);
 	for (int i = 0; i <= n; i++)
 	{
@@ -221,7 +219,7 @@ bool numSearchTest(int personName, char* nameFinder, person* test)
 
 int main()
 {
-	person peopleTest1[2] = {{"qw","435345"}, {"sdfsd","436564" }};
+	Person peopleTest1[2] = {{"qw","435345"}, {"sdfsd","436564" }};
 	char numTestFinder[] = "sdfsd";
 	if (!numSearchTest(2, numTestFinder, peopleTest1))
 	{
@@ -229,7 +227,7 @@ int main()
 		return 1;
 	}
 
-	person peopleTest2[2] = { {"qw","435345"}, {"sdfsd","436564" } };
+	Person peopleTest2[2] = { {"qw","435345"}, {"sdfsd","436564" } };
 	char nameTestFinder[] = "436564";
 	if (!nameSearchTest(2, nameTestFinder, peopleTest2))
 	{
@@ -237,12 +235,11 @@ int main()
 		return 1;
 	}
 
-	person people[100];
-	FILE* Phonebook;
-	Phonebook = fopen("Phonebook.txt", "r+t");
+	Person people[100];
+	FILE* phonebook = fopen("Phonebook.txt", "r+t");
 	setlocale(LC_ALL, "Russian");
 	printf("Это телефонный справочник\n");
-	int schetchic = load(people);
+	int counter = load(people);
 	char act = '0';
 	while (true)
 	{
@@ -253,17 +250,19 @@ int main()
 		scanf("%c", &act);
 		switch (act)
 		{
-		case '0': {exit(Phonebook); return 0;}
-		case '1': {schetchic = addPerson(schetchic,people);break;}
-		case '2': {Print(Phonebook);break;}
-		case '3': {printNumSearch(schetchic, people);break;}
-		case '4': {printNameSearch(schetchic, people);break;}
-		case '5': {saveNote(schetchic, people);break;}
-		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n 2 - распечатать все имеющиеся записи\n 3 - найти имя по телефону \n 4 - найти телефон по имени \n 5 - сохранить текущие данные в файл \n");break;}
+		case '0': {exit(phonebook); return 0;}
+		case '1': {counter = addPerson(counter,people);break;}
+		case '2': {Print(phonebook);break;}
+		case '3': {printNumSearch(counter, people);break;}
+		case '4': {printNameSearch(counter, people);break;}
+		case '5': {saveNote(counter, people);break;}
+		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n \
+							2 - распечатать все имеющиеся записи\n 3 - найти имя по телефону \n \
+							4 - найти телефон по имени \n 5 - сохранить текущие данные в файл \n");break;}
 		case '\n': {break;}
 		default: {printf("Я не знаю такой команды, вызовите инструкцию\n");}
 		}
 	}
-	fclose(Phonebook);
+	fclose(phonebook);
 	return 0;
 }
