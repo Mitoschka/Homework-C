@@ -6,102 +6,143 @@ void generationArray(int* massif, int size)
 	for (int i = 0; size > i; ++i)
 	{
 		massif[i] = rand() % 10 - 5;
+		printf("%d, ", massif[i]);
 	}
 }
 
-void printArray(int* array, int size)
+void qsortArray(int* sArr, int first, int last)
 {
-	for (int i = 0; size > i; ++i)
+	if (first < last)
 	{
-		printf("%d, ", array[i]);
-	}
-	printf("\n\n");
-}
-
-int maxUnicElement(int* unicElements, int* unicElemsCounts, int size) 
-{
-	int maxElemnt = -100000000;
-	int maxIndex = 0;
-	for (int i = 0; i < size; i++)
-	{
-		if (maxElemnt < unicElemsCounts[i])
+		int left = first, right = last, middle = sArr[(left + right) / 2];
+		do
 		{
-			maxElemnt = unicElemsCounts[i];
-			maxIndex = i;
-		}
-	}
-	return unicElements[maxIndex];
-}
-
-int matchRate(int* arrayOfElements, int* arrayOfUniqueElements, int* arrayOfRepetitionsOfElements, int size)
-{
-	int unic = 0;
-	for (int i = 0; i < size; i++)
-	{
-		int element = arrayOfElements[i];
-		bool isUnic = true;
-		for (int j = 0; j < unic; j++)
-		{
-			if (arrayOfUniqueElements[j] == element)
+			while (sArr[left] < middle) left++;
+			while (sArr[right] > middle) right--;
+			if (left <= right)
 			{
-				isUnic = false;
-				arrayOfRepetitionsOfElements[j] += 1;
-				break;
+				int tmp = sArr[left];
+				sArr[left] = sArr[right];
+				sArr[right] = tmp;
+				left++;
+				right--;
 			}
-		}
-		if (isUnic)
-		{
-			arrayOfUniqueElements[unic] = element;
-			arrayOfRepetitionsOfElements[unic] = 1;
-			unic++;
-		}
+		} while (left <= right);
+		qsortArray(sArr, first, right);
+		qsortArray(sArr, left, last);
 	}
-	return unic;
 }
 
-bool test(int* arrayOfElements, int size, int unic, int unicElement)
+void arraySorting(int* massif, int size)
 {
-	int* arrayOfUniqueElements = new int[size]();
-	int* arrayOfRepetitionsOfElements = new int[size]();
-	if (unic != matchRate(arrayOfElements, arrayOfUniqueElements, arrayOfRepetitionsOfElements, size))
+	generationArray(massif, size);
+	qsortArray(massif, 0, size - 1);
+	printf("\n\nSorted array:\n");
+	for (int i = 0; i < size; i++)
 	{
-		delete[] arrayOfUniqueElements;
-		delete[] arrayOfRepetitionsOfElements;
-		return false;
+		printf("%d ", massif[i]);
 	}
-	if (unicElement != maxUnicElement(arrayOfUniqueElements, arrayOfRepetitionsOfElements, unic))
+}
+
+void differentiationOfNumber()
+{
+	int size = 0;
+	int number = 0;
+	printf("Enter the size of the array: ");
+	scanf("%d", &size);
+	int* firstMassif = new int[size];
+	arraySorting(firstMassif, size);
+	int* secondMassif = new int[size];
+	for (int i = 1; i < size; i++)
 	{
-		delete[] arrayOfUniqueElements;
-		delete[] arrayOfRepetitionsOfElements;
-		return false;
+		secondMassif[i] = firstMassif[i] - firstMassif[i - 1];
 	}
-	delete[] arrayOfUniqueElements;
-	delete[] arrayOfRepetitionsOfElements;
+	secondMassif[0] = firstMassif[0];
+
+	bool flag = false;
+	int maxLen = 0;
+	int maxIndex = 0;
+	int len = 0;
+	int index = 0;
+	for (int i = 0; i < size; i++)
+	{
+		if (secondMassif[i] == 0 && flag)
+		{
+			len++;
+			continue;
+		}
+		if (secondMassif[i] == 0)
+		{
+			len++;
+			index = i;
+			flag = true;
+		}
+		else
+		{
+			if (maxLen <= len)
+			{
+				maxLen = len;
+				maxIndex = index;
+			}
+			len = 0;
+			flag = false;
+		}
+	}
+	printf("\n%d\n", firstMassif[maxIndex]);
+	delete[] firstMassif;
+	delete[] secondMassif;
+}
+
+void printDifferentiationOfNumber()
+{
+
+}
+
+bool test(int len, int massif[], int sortedArray[])
+{
+	qsortArray(massif, 0, len - 1);
+	for (int i = 0; i < len; ++i)
+	{
+		if (massif[i] != sortedArray[i])
+		{
+			return false;
+
+		}
+	}
 	return true;
 }
 
 int main()
 {
-	int arrayOfElementsTest[] = {1, 3, 5, 1, 4, 2, 1, 4};
-	if (!test(arrayOfElementsTest, 8, 5, 1))
+	int arrayFirst[] = { 5, -2, 8, 0, 1 };
+	int sortedArrayFirst[] = { -2, 0, 1, 5, 8 };
+	if (!test(5, arrayFirst, sortedArrayFirst))
 	{
 		printf("Error");
 		return 1;
 	}
-	int size = 0;
-	printf("Enter the size of the array: ");
-	scanf("%d", &size);
-	int* arrayOfElements = new int[size];
-	int* arrayOfUniqueElements = new int[size]();
-	int* arrayOfRepetitionsOfElements = new int[size]();
-	generationArray(arrayOfElements, size);
-	printArray(arrayOfElements, size);
-	int unicNumbers = matchRate(arrayOfElements, arrayOfUniqueElements, arrayOfRepetitionsOfElements, size);
-	printArray(arrayOfUniqueElements, unicNumbers);
-	printArray(arrayOfRepetitionsOfElements, unicNumbers);
-	printf("most common elment: %d", maxUnicElement(arrayOfUniqueElements, arrayOfRepetitionsOfElements, unicNumbers));
-	delete[] arrayOfElements;
-	delete[] arrayOfUniqueElements;
-	delete[] arrayOfRepetitionsOfElements;
+	const int length = 1000;
+
+	int a[length]{};
+
+	for (int i = 0; i < length; i++)
+	{
+		a[i] = 1;
+	}
+
+	int correctArray[length]{};
+
+	for (int i = 0; i < length; i++)
+	{
+		correctArray[i] = 1;
+	}
+
+	qsortArray(a, 0, length - 1);
+	if (!test(length, a, correctArray))
+	{
+		printf("Error");
+		return 1;
+	}
+	differentiationOfNumber();
 	return 0;
 }
