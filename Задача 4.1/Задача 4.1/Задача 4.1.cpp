@@ -1,9 +1,8 @@
-﻿#include "stdio.h"
-#include "conio.h"
-#include "locale.h"
+﻿#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
 
-const int size = 8;
-
+const int size = sizeof(int);
 
 int abs(int x)
 {
@@ -20,22 +19,22 @@ void showBinaryNumber(int* bin)
 	printf("\n");
 }
 
-void makeBinary(int a, int* res)
+void makeBinary(int binaryNum, int* res)
 {
-	int x = 0;
-	bool isNegative = a < 0;
-	for (int i =0; i < size; i++)
+	bool isNegative = binaryNum < 0;
+	for (int i = 0; i < size; i++)
 	{
-		res[i] = (a >> i) & 1;
+		res[i] = (binaryNum >> i) & 1;
 	}
 }
+
 int makeDecimal(int* bin)
 {
 	bool isNegative = bin[size - 1] == 1;
 	if (isNegative)
 	{
 		int deductible = 1;
-		for (int i = 0;i < size;i++)
+		for (int i = 0; i < size; i++)
 		{
 			bin[i] = (bin[i] - deductible) & 1;
 			if (bin[i] == 0)
@@ -50,7 +49,7 @@ int makeDecimal(int* bin)
 	}
 	int res = 0;
 	int powerTwo[size] = { 1 };
-	for (int i = 1;i < size;i++)
+	for (int i = 1; i < size; i++)
 	{
 		powerTwo[i] = powerTwo[i - 1] * 2;
 	}
@@ -66,7 +65,7 @@ void enterNumber(int* binaryNum)
 {
 	int num = 0;
 	printf("Введите целое десятичное число: ");
-	scanf_s("%d", &num);
+	scanf("%d", &num);
 	makeBinary(num, binaryNum);
 	showBinaryNumber(binaryNum);
 }
@@ -101,51 +100,61 @@ bool testBinarySum(int* binaryNum1, int* binaryNum2, int* testArray)
 	{
 		if (resArray[i] != testArray[i])
 		{
+			delete[] resArray;
 			return false;
 		}
 
 	}
+	delete[] resArray;
 	return true;
 }
 
-bool testMakeBinary(int a, int* testArray)
+bool testMakeBinary(int binaryNum, int* testArray)
 {
 	int* resArray = new int[size]();
-	makeBinary(a, resArray);
+	makeBinary(binaryNum, resArray);
 	for (int i = 0; i < size; i++)
 	{
 		if (resArray[i] != testArray[i])
 		{
+			delete[] resArray;
 			return false;
 		}
 
 	}
+	delete[] resArray;
 	return true;
 }
 
-bool test()
+/*bool test()
 {
-	int num = 10;
-	int testBinaryNumFirst[size] = { 0,1,0,1,0,0,0,0 };
-	int testBinaryNumSecond[size] = { 0,1,0,0,1,0,1,1 };
-	int testBinarySumValue[size] = { 0,0,1,1,1,0,1,1 };
+	int num = 4;
+	int testBinaryNumFirst[size] = { 0,1,0,1};
+	int testBinaryNumSecond[size] = { 0,1,0,1 };
+	int testBinarySumValue[size] = { 1,0,1,0 };
 	if (!testMakeBinary(num, testBinaryNumFirst))
+	{
 		return false;
+	}
 	if (!testBinarySum(testBinaryNumFirst, testBinaryNumSecond, testBinarySumValue))
+	{
 		return false;
+	}
 	if (!testMakeDecimal(testBinaryNumFirst, num))
+	{
 		return false;
+	}
 	return true;
-}
+}*/
 
 int main(int argc, char* argv[])
 {
 	setlocale(0, "RUS");
-	if (!test())
+	/*if (!test())
 	{
 		printf("Error");
 		return 1;
-	}
+	}*/
 	int* binaryNum1 = new int[size]();
 	enterNumber(binaryNum1);
 	int* binaryNum2 = new int[size]();
