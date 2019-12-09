@@ -10,26 +10,26 @@ void generationArray(int* massif, int size)
 	}
 }
 
-void qsortArray(int* sArr, int first, int last)
+void qsortArray(int* supportingElement, int first, int last)
 {
 	if (first < last)
 	{
-		int left = first, right = last, middle = sArr[(left + right) / 2];
+		int left = first, right = last, middle = supportingElement[(left + right) / 2];
 		do
 		{
-			while (sArr[left] < middle) left++;
-			while (sArr[right] > middle) right--;
+			while (supportingElement[left] < middle) left++;
+			while (supportingElement[right] > middle) right--;
 			if (left <= right)
 			{
-				int tmp = sArr[left];
-				sArr[left] = sArr[right];
-				sArr[right] = tmp;
+				int tmp = supportingElement[left];
+				supportingElement[left] = supportingElement[right];
+				supportingElement[right] = tmp;
 				left++;
 				right--;
 			}
 		} while (left <= right);
-		qsortArray(sArr, first, right);
-		qsortArray(sArr, left, last);
+		qsortArray(supportingElement, first, right);
+		qsortArray(supportingElement, left, last);
 	}
 }
 
@@ -44,20 +44,14 @@ void arraySorting(int* massif, int size)
 	}
 }
 
-void differentiationOfNumber()
+int differentiationOfNumber(int* firstArray, int size)
 {
-	int size = 0;
-	int number = 0;
-	printf("Enter the size of the array: ");
-	scanf("%d", &size);
-	int* firstMassif = new int[size];
-	arraySorting(firstMassif, size);
-	int* secondMassif = new int[size];
+	int* secondArray = new int[size];
 	for (int i = 1; i < size; i++)
 	{
-		secondMassif[i] = firstMassif[i] - firstMassif[i - 1];
+		secondArray[i] = firstArray[i] - firstArray[i - 1];
 	}
-	secondMassif[0] = firstMassif[0];
+	secondArray[0] = firstArray[0];
 
 	bool flag = false;
 	int maxLen = 0;
@@ -66,12 +60,12 @@ void differentiationOfNumber()
 	int index = 0;
 	for (int i = 0; i < size; i++)
 	{
-		if (secondMassif[i] == 0 && flag)
+		if (secondArray[i] == 0 && flag)
 		{
 			len++;
 			continue;
 		}
-		if (secondMassif[i] == 0)
+		if (secondArray[i] == 0)
 		{
 			len++;
 			index = i;
@@ -88,22 +82,36 @@ void differentiationOfNumber()
 			flag = false;
 		}
 	}
-	printf("\n%d\n", firstMassif[maxIndex]);
-	delete[] firstMassif;
-	delete[] secondMassif;
+	delete[] secondArray;
+	return firstArray[maxIndex];
 }
 
-void printDifferentiationOfNumber()
+void  printDifferentiationOfNumber()
 {
-
+	int size = 0;
+	int number = 0;
+	printf("Enter the size of the array: ");
+	scanf("%d", &size);
+	int* firstArray = new int[size];
+	arraySorting(firstArray, size);
+	differentiationOfNumber(firstArray, size);
+	printf("\n%d\n", differentiationOfNumber(firstArray, size));
+	delete[] firstArray;
 }
 
-bool test(int len, int massif[], int sortedArray[])
+bool differentiationTest(int* firstArray, int secondArray, int size)
 {
-	qsortArray(massif, 0, len - 1);
+	differentiationOfNumber(firstArray, size);
+	int result = differentiationOfNumber(firstArray, size);
+	return result == secondArray;
+}
+
+bool sortTest(int len, int array[], int sortedArray[])
+{
+	qsortArray(array, 0, len - 1);
 	for (int i = 0; i < len; ++i)
 	{
-		if (massif[i] != sortedArray[i])
+		if (array[i] != sortedArray[i])
 		{
 			return false;
 
@@ -114,9 +122,17 @@ bool test(int len, int massif[], int sortedArray[])
 
 int main()
 {
-	int arrayFirst[] = { 5, -2, 8, 0, 1 };
+	int  differentiationTestArray[] = { -4, -3, 0, 1, 1, 1, -5, -5, -4, 1 };
+	int maxIndex = 1;
+	if (!differentiationTest(differentiationTestArray, maxIndex, 10))
+	{
+		printf("error");
+		return 1;
+	}
+
+	int arrayFirstTest[] = { 5, -2, 8, 0, 1 };
 	int sortedArrayFirst[] = { -2, 0, 1, 5, 8 };
-	if (!test(5, arrayFirst, sortedArrayFirst))
+	if (!sortTest(5, arrayFirstTest, sortedArrayFirst))
 	{
 		printf("Error");
 		return 1;
@@ -138,11 +154,11 @@ int main()
 	}
 
 	qsortArray(a, 0, length - 1);
-	if (!test(length, a, correctArray))
+	if (!sortTest(length, a, correctArray))
 	{
 		printf("Error");
 		return 1;
 	}
-	differentiationOfNumber();
+	printDifferentiationOfNumber();
 	return 0;
 }
