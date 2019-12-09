@@ -1,6 +1,6 @@
 ﻿#include <stdio.h>
 #include <string.h>
-#include "locale.h"
+#include <locale.h>
 #include <stdlib.h>
 
 int const size = 100;
@@ -43,7 +43,9 @@ void saveNote(int peopleCounter, Person* people)
 	FILE* phonebook = fopen("Phonebook.txt", "w");
 	if (phonebook == nullptr)
 	{
-		printf("error\n");
+		printf("Error\n");
+		fclose(phonebook);
+		printf("\n\nСохранение не прошло \n");
 	}
 	else
 	{
@@ -56,47 +58,33 @@ void saveNote(int peopleCounter, Person* people)
 	printf("\n\nСохранение прошло успешно \n");
 }
 
-void Print(FILE* phonebook)
+void print(FILE* phonebook)
 {
-	char s[100];
-	int k = 0;
+	char string[100];
+	int numOfLines = 0;
 	if ((phonebook = fopen("Phonebook.txt", "r")) == nullptr)
 	{
 		printf("error\n");
 	}
 	else
 	{
-		while (fgets(s, 100, phonebook))
+		while (fgets(string, 100, phonebook))
 		{
-			printf("%s", s);
-			k++;
+			printf("%s", string);
+			numOfLines++;
 		}
 	}
-	printf("Количество строк: %d\n", k);
+	printf("Количество строк: %d\n", numOfLines);
 	fclose(phonebook);
 	printf("Все данные были распечатаны\n");
 }
 
-Person* numSearch(char personName, char* nameFinder, Person* people)
+Person* numSearch(int personName, char* nameFinder, Person* people)
 {
-	int strSizeFinder = strlen(nameFinder);
 	for (int i = 0; i < personName; i++)
 	{
-		bool equal = true;
 		Person personVal = people[i];
-		int sizePersonNum = strlen(personVal.num);
-		if (sizePersonNum != strSizeFinder)
-		{
-			continue;
-		}
-		for (int j = 0; j < strSizeFinder; j++)
-		{
-			if (nameFinder[j] != personVal.num[j])
-			{
-				equal = false;
-			}
-		}
-		if (equal)
+		if (strcmp(nameFinder, personVal.name)==0)
 		{
 			return &people[i];
 		}
@@ -125,24 +113,10 @@ int min(int x, int y)
 
 Person* nameSearch(int personNum, char* numFinder, Person* people)
 {
-	int strSizeFinder = strlen(numFinder);
 	for (int i = 0; i < personNum; i++)
 	{
-		bool equal = true;
 		Person personVal = people[i];
-		int sizePersonName = strlen(personVal.name);
-		if (sizePersonName != strSizeFinder)
-		{
-			continue;
-		}
-		for (int j = 0; j < strSizeFinder; j++)
-		{
-			if (numFinder[j] != personVal.name[j])
-			{
-				equal = false;
-			}
-		}
-		if (equal)
+		if (strcmp(numFinder, personVal.num)==0)
 		{
 			return &people[i];
 		}
@@ -191,11 +165,11 @@ int load(Person* people)
 
 bool nameSearchTest(int personNum, char* numFinder, Person* test)
 {
-	Person* res = nameSearch(personNum, numFinder, test);
-	int n = strlen(numFinder);
-	for (int i = 0; i <= n; i++)
+	Person* result = nameSearch(personNum, numFinder, test);
+	int temporaryVariable = strlen(numFinder);
+	for (int i = 0; i <= temporaryVariable; i++)
 	{
-		if (numFinder[i] != res->name[i])
+		if (numFinder[i] != result->num[i])
 		{
 			return false;
 		}
@@ -205,11 +179,11 @@ bool nameSearchTest(int personNum, char* numFinder, Person* test)
 
 bool numSearchTest(int personName, char* nameFinder, Person* test)
 {
-	Person* res = numSearch(personName, nameFinder,test);
-	int n = strlen(nameFinder);
-	for (int i = 0; i <= n; i++)
+	Person* result = numSearch(personName, nameFinder,test);
+	int temporaryVariable = strlen(nameFinder);
+	for (int i = 0; i <= temporaryVariable; i++)
 	{
-		if (nameFinder[i] != res->num[i])
+		if (nameFinder[i] != result->name[i])
 		{
 			return false;
 		}
@@ -219,17 +193,16 @@ bool numSearchTest(int personName, char* nameFinder, Person* test)
 
 int main()
 {
-	Person peopleTest1[2] = {{"qw","435345"}, {"sdfsd","436564" }};
+	Person peopleTest[2] = {{"435345","qw"}, {"436564","sdfsd" }};
 	char numTestFinder[] = "sdfsd";
-	if (!numSearchTest(2, numTestFinder, peopleTest1))
+	if (!numSearchTest(2, numTestFinder, peopleTest))
 	{
 		printf("Error");
 		return 1;
 	}
 
-	Person peopleTest2[2] = { {"qw","435345"}, {"sdfsd","436564" } };
 	char nameTestFinder[] = "436564";
-	if (!nameSearchTest(2, nameTestFinder, peopleTest2))
+	if (!nameSearchTest(2, nameTestFinder, peopleTest))
 	{
 		printf("Error");
 		return 1;
@@ -252,7 +225,7 @@ int main()
 		{
 		case '0': {exit(phonebook); return 0;}
 		case '1': {counter = addPerson(counter,people);break;}
-		case '2': {Print(phonebook);break;}
+		case '2': {print(phonebook);break;}
 		case '3': {printNumSearch(counter, people);break;}
 		case '4': {printNameSearch(counter, people);break;}
 		case '5': {saveNote(counter, people);break;}
