@@ -2,12 +2,7 @@
 #include <stdlib.h>
 #include <locale.h>
 
-const int size = sizeof(int);
-
-int abs(int x)
-{
-	return x >= 0 ? x : -x;
-}
+const int size = sizeof(int)*8;
 
 void showBinaryNumber(int* bin)
 {
@@ -126,12 +121,12 @@ bool testMakeBinary(int binaryNum, int* testArray)
 	return true;
 }
 
-/*bool test()
+bool test()
 {
-	int num = 4;
-	int testBinaryNumFirst[size] = { 0,1,0,1};
-	int testBinaryNumSecond[size] = { 0,1,0,1 };
-	int testBinarySumValue[size] = { 1,0,1,0 };
+	int num = 5;
+	int testBinaryNumFirst[size] = {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	int testBinaryNumSecond[size] = {0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+	int testBinarySumValue[size] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	if (!testMakeBinary(num, testBinaryNumFirst))
 	{
 		return false;
@@ -145,16 +140,16 @@ bool testMakeBinary(int binaryNum, int* testArray)
 		return false;
 	}
 	return true;
-}*/
+}
 
 int main(int argc, char* argv[])
 {
 	setlocale(0, "RUS");
-	/*if (!test())
+	if (!test())
 	{
 		printf("Error");
 		return 1;
-	}*/
+	}
 	int* binaryNum1 = new int[size]();
 	enterNumber(binaryNum1);
 	int* binaryNum2 = new int[size]();
