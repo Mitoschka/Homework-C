@@ -7,21 +7,6 @@ struct node
 	struct node* next;
 };
 
-bool search(node* list, int data)
-{
-	node* ptr = list;
-	while (ptr != NULL)
-	{
-		if (ptr->data == data)
-		{
-			return true;
-		}
-		ptr = ptr->next;
-	}
-	return false;
-}
-
-
 node* list(int a)
 {
 	node* head = new node;
@@ -50,8 +35,26 @@ void printReversed(struct node* node)
 	}
 }
 
-int main()
+bool search(node* list, int data)
 {
-	printReversed(node);
+	node* ptr = list;
+	while (ptr != NULL)
+	{
+		if (ptr->data == data)
+		{
+			return true;
+		}
+		ptr = ptr->next;
+	}
+	return false;
+}
+
+int main(struct node* node)
+{
+	if (node != nullptr)
+	{
+		printReversed(node->next);
+		printf("%d\n", node->data);
+	}
 	return 0;
 }
