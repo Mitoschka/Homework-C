@@ -2,7 +2,15 @@
 #include <iostream>
 #include <stdio.h>
 
-void inputAndOutput(int* arrayOfElements, int size)
+void input() {};
+
+void printArray() {};
+
+void bubbleSort() {};
+
+void printSortedArray() {};
+
+void input(int* arrayOfElements, int size)
 {
 	printf("Enter the size of element: ");
 	scanf("%d", &size);
@@ -66,7 +74,7 @@ int main()
 	int size = 0;
 	int arrayOfElements[] = {0};
 	int number = sizeof(arrayOfElements) / sizeof(arrayOfElements[0]);
-	inputAndOutput(arrayOfElements, number);
+	input(arrayOfElements, number);
 	printArray(arrayOfElements, size);
 	bubbleSort(arrayOfElements, number);
 	printSortedArray(arrayOfElements, size);
