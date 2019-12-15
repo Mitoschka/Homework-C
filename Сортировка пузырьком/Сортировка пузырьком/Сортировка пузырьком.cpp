@@ -2,20 +2,61 @@
 #include <iostream>
 #include <stdio.h>
 
-int const N = 10;
-
-void bubbleSort(int* num, int size)
+void inputAndOutput(int* arrayOfElements, int size)
 {
-	for (int i = 0; i < (size - 1); i++)
+	printf("Enter the size of element: ");
+	scanf("%d", &size);
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = (size - 1); j > i; j--)	// для всех элементов после i-ого
+		printf("\nEnter the %d element: ", i);
+		scanf("%d", &arrayOfElements[i]);
+	}
+}
+
+void printArray(int* arrayOfElements, int size)
+{
+	printf("\nArray:");
+	for (int i = 0; i < size; i++)
+	{
+		printf(" %d", arrayOfElements[i]);
+	}
+	printf("\n");
+}
+
+void printSortedArray(int *arrayOfElements, int size)
+{
+	printf("\nSorted array:");
+	for (int i = 0; i < size; i++)
+	{
+		printf(" %d", arrayOfElements[i]);
+	}
+	printf("\n");
+}
+
+void swap(int* firstNumber, int* secondNumber)
+{
+	int temp = *firstNumber;
+	*firstNumber = *secondNumber;
+	*secondNumber = temp;
+}
+ 
+void bubbleSort(int arrayOfElements[], int number)
+{
+	bool swapped = true;
+	for (int i = 0; i < number - 1; i++)
+	{
+		swapped = false;
+		for (int j = 0; j < number - i - 1; j++)
 		{
-			if (num[j - 1] > num[j]) // если текущий элемент меньше предыдущего
+			if (arrayOfElements[j] > arrayOfElements[j + 1])
 			{
-				int tmp = num[j - 1];	// меняем их местами
-				num[j - 1] = num[j];
-				num[j] = tmp;
+				swap(&arrayOfElements[j], &arrayOfElements[j + 1]);
+				swapped = true;
 			}
+		}
+		if (swapped == false)
+		{
+			break;
 		}
 	}
 }
@@ -23,24 +64,11 @@ void bubbleSort(int* num, int size)
 int main()
 {
 	int size = 0;
-	printf("Enter the size of element: ");
-	scanf("%d", &size);
-	int num[N] = {};
-	for (int i = 0; i < size; i++)
-	{
-		printf("\nEnter the %d element: ", i);
-		scanf("%d", &num[i]);
-	}
-	printf("\nArray:");
-	for (int i = 0; i < size; i++)
-	{
-		printf(" %d", num[i]);
-	}
-	bubbleSort(num, N);
-	printf("\nSorted array:");
-	for (int i = 0; i < size; i++)
-	{
-		printf(" %d", num[i]);
-	}
+	int arrayOfElements[] = {0};
+	int number = sizeof(arrayOfElements) / sizeof(arrayOfElements[0]);
+	inputAndOutput(arrayOfElements, number);
+	printArray(arrayOfElements, size);
+	bubbleSort(arrayOfElements, number);
+	printSortedArray(arrayOfElements, size);
 	return 0;
 }
