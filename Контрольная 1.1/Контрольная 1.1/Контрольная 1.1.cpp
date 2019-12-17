@@ -14,12 +14,10 @@ slist* slistInput(FILE* _in);
 
 int main() 
 {
-	const slist* element;
-	slist* lst;
-
+	const slist* element = NULL;
+	slist* lst = NULL;
 	printf("Enter: \n");
 	lst = slistInput(stdin);
-
 	for (element = lst; element != NULL; element = element->next)
 	{
 		printf("Element - %d; repeated %u times\n", element->val, element->cnt);
