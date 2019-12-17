@@ -12,7 +12,8 @@ int  slistAdd(slist** lst, int val);
 void slistClear(slist* lst);
 slist* slistInput(FILE* _in);
 
-int main(void) {
+int main() 
+{
 	const slist* element;
 	slist* lst;
 
