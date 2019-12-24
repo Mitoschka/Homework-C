@@ -1,23 +1,10 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
 
-void record()
+void record(FILE* firstFile, FILE* secondFile)
 {
-	FILE* firstFile = nullptr;
-	if ((firstFile = fopen("text.txt", "r")) == nullptr)
-	{
-		printf("Could not open file...");
-		exit(0);
-	}
 	int readSymbol = 0;
 	int i = 0;
-	FILE* secondFile = nullptr;
-	if ((secondFile = fopen("quotes.txt", "r")) == nullptr)
-	{
-		printf("Could not open file...");
-		exit(0);
-	}
-	secondFile = fopen("quotes.txt", "w");
 	while ((readSymbol = fgetc(firstFile)) != EOF)
 	{
 		if (readSymbol == '\"')
@@ -33,12 +20,30 @@ void record()
 			fprintf(secondFile, "%c", readSymbol);
 		}
 	}
+}
+
+void print()
+{
+	FILE* firstFile = nullptr;
+	if ((firstFile = fopen("text.txt", "r")) == nullptr)
+	{
+		printf("Could not open file...");
+		exit(0);
+	}
+	FILE* secondFile = nullptr;
+	if ((secondFile = fopen("quotes.txt", "r")) == nullptr)
+	{
+		printf("Could not open file...");
+		exit(0);
+	}
+	secondFile = fopen("quotes.txt", "w");
+	record(firstFile, secondFile);
 	fclose(firstFile);
 	fclose(secondFile);
 }
 
 int main()
 {
-	record();
+	print();
 	return 0;
 }
