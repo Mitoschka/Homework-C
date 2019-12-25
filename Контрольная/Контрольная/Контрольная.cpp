@@ -8,13 +8,13 @@ void shellSort(int maxSize, int intArray[])
 	int interval = 1;
 	int elements = maxSize;
 	int i = 0;
-	while (interval <= elements / 3)
+	while (interval <= elements / 3)  
 	{
 		interval = interval * 3 + 1;
 	}
 	while (interval > 0)
 	{
-		for (outer = interval; outer < elements; outer++)
+		for (outer = interval; outer < elements; outer++) 
 		{
 			valueToInsert = intArray[outer];
 			inner = outer;
@@ -48,9 +48,10 @@ void methodShellSortStart()
 	{
 		printf("Input %d element of array: ", i);
 		resSecond = scanf("%d", &newMass[i]);
-		if (resSecond == 0 || resSecond == EOF || newMass[i] < 0)
+		if (resSecond == 0 || resSecond == EOF)
 		{
 			printf("Enter valid data\n");
+			delete[] newMass;
 			return;
 		}
 	}
