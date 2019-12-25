@@ -33,10 +33,11 @@ void shellSort(int maxSize, int intArray[])
 void methodShellSortStart()
 {
 	int cardinality = 0;
-	int res = 0;
+	int resFirst = 0;
+	int resSecond = 0;
 	printf("Enter number of elements: ");
-	res = scanf("%d", &cardinality);
-	if (res == 0 || res == EOF || cardinality < 1)
+	resFirst = scanf("%d", &cardinality);
+	if (resFirst == 0 || resFirst == EOF || cardinality < 1)
 	{
 		printf("Enter valid data\n");
 		return;
@@ -46,11 +47,10 @@ void methodShellSortStart()
 	for (int i = 0; i < cardinality; i++)
 	{
 		printf("Input %d element of array: ", i);
-		res = scanf("%d", &newMass[i]);
-		if (res == 0 || res == EOF || newMass[i] < 1)
+		resSecond = scanf("%d", &newMass[i]);
+		if (resSecond == 0 || resSecond == EOF || newMass[i] < 1)
 		{
 			printf("Enter valid data\n");
-
 			return;
 		}
 	}
