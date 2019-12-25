@@ -59,7 +59,7 @@ void methodShellSortStart()
 	printf("Sorted array are:\n");
 	for (int i = 0; i < cardinality; i++)
 	{
-		printf("%i ", newMass[i]);
+		printf("%d ", newMass[i]);
 	}
 	delete[] newMass;
 }
