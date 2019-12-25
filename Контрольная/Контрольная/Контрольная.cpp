@@ -48,11 +48,6 @@ void methodShellSortStart()
 	{
 		printf("Input %d element of array: ", i);
 		resSecond = scanf("%d", &newMass[i]);
-		if (resSecond == 0 || resSecond == EOF || newMass[i] < 1)
-		{
-			printf("Enter valid data\n");
-			return;
-		}
 	}
 	shellSort(cardinality, newMass);
 	printf("\n");
