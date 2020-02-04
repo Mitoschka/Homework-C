@@ -3,68 +3,47 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-struct node 
+struct Node
 {
-	char* data;
-	struct node* next;
+	int data;
+	struct Node* next;
 };
 
 
-void printList(node* head) 
+void printList(Node* head)
 {
-	struct node* ptr = head;
+	Node* ptr = head;
 	printf("\n[ ");
-	while (ptr != nullptr) 
+	while (ptr != nullptr)
 	{
-		printf("(%s) ", ptr->data);
+		printf("(%d) ", ptr->data);
 		ptr = ptr->next;
 	}
 	printf(" ]\n");
 }
 
-node* insertFirst(char* data, node* head) 
-{
-	struct node* link = (struct node*) malloc(sizeof(node));
-	link->data = data;
-	link->next = head;
-	return link;
-}
-
-struct node* deleteFirst(node* head) 
-{
-	struct node* tempLink = head;
-	head = head->next;
-	return head;
-}
-
-bool isEmpty(node* head) 
-{
-	return head == nullptr;
-}
-
-int length(node* head) 
+int length(Node* head)
 {
 	int length = 0;
-	struct node* current;
-	for (current = head; current != nullptr; current = current->next) 
+	Node* current;
+	for (current = head; current != nullptr; current = current->next)
 	{
 		length++;
 	}
 	return length;
 }
 
-void reverse(struct node** headRef) 
+void reverse(Node** headRef)
 {
-	if (length(*headRef) < 2) 
+	if (length(*headRef) < 2)
 	{
 		return;
 	}
-	struct node* prev = nullptr;
-	struct node* current = *headRef;
-	struct node* next;
-	while (current != nullptr) 
+	Node* prev = nullptr;
+	Node* current = *headRef;
+	while (current != nullptr)
 	{
-		next = current->next;
+		Node* next = current->next;
 		current->next = prev;
 		prev = current;
 		current = next;
@@ -72,18 +51,40 @@ void reverse(struct node** headRef)
 	*headRef = prev;
 }
 
+Node* insertFirst(int data, Node* head)
+{
+	Node* link = (struct Node*) malloc(sizeof(Node));
+	reverse(&head);
+	link->data = data;
+	link->next = head;
+	reverse(&link);
+	return link;
+}
 
-bool delim(char symbol) 
+struct Node* deleteFirst(Node* head)
+{
+	Node* tempLink = head;
+	head = head->next;
+	free(tempLink);
+	return head;
+}
+
+bool isEmpty(Node* head)
+{
+	return head == nullptr;
+}
+
+bool isDelimetr(char symbol)
 {
 	return symbol == ' ';
 }
 
-bool isOperation(char symbol) 
+bool isOperation(char symbol)
 {
 	return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/' || symbol == '%';
 }
 
-int priority(char operation) 
+int priority(char operation)
 {
 	return
 		operation == '+' || operation == '-' ? 2 :
@@ -96,31 +97,28 @@ bool isNum(char symbol)
 	return '0' <= symbol && symbol <= '9';
 }
 
-node* processOperation(node* list, char operation) 
+Node* processOperation(Node* list, char operation)
 {
-	int leftOperand = atoi(list->data);
+	int rightOperand = list->data;
 	list = deleteFirst(list);
-	int rightOperand = atoi(list->data);
+	int leftOperand = list->data;
 	list = deleteFirst(list);
 	printf("%d %c %d\n", leftOperand, operation, rightOperand);
-	char* tmpNum = new char[100];
-	switch (operation) 
+
+	switch (operation)
 	{
-		case '+':  sprintf(tmpNum, "%d", leftOperand + rightOperand);	break;
-		case '-':  sprintf(tmpNum, "%d", leftOperand - rightOperand);	break;
-		case '*':  sprintf(tmpNum, "%d", leftOperand * rightOperand);	break;
-		case '/':  sprintf(tmpNum, "%d", leftOperand / rightOperand);	break;
-		case '%':  sprintf(tmpNum, "%d", leftOperand % rightOperand);	break;
+	case '+':  list = insertFirst(leftOperand + rightOperand, list); break;
+	case '-':  list = insertFirst(leftOperand - rightOperand, list); break;
+	case '*':  list = insertFirst(leftOperand * rightOperand, list); break;
+	case '/':  list = insertFirst(leftOperand / rightOperand, list); break;
+	case '%':  list = insertFirst(leftOperand % rightOperand, list); break;
 	}
-	reverse(&list);
-	list = insertFirst(tmpNum, list);
-	reverse(&list);
 	return list;
 }
 
 bool testDelim(char symbol, bool result)
 {
-	return delim(symbol) == result;
+	return isDelimetr(symbol) == result;
 }
 
 bool testIsOperation(char symbol, bool result)
@@ -161,27 +159,16 @@ int main()
 		return 2;
 	}
 	printf("Enter expressions in postfix form: \n");
-	struct node* headNumber = nullptr;
-	struct node* headOperation = nullptr;
-	char* element = new char[1];
+	Node* headNumber = nullptr;
+	char* element = (char*)malloc(sizeof(char));
 	fgets(element, BUFSIZ, stdin);
 	for (int i = 0; i < strlen(element); i++)
 	{
-		if (!delim(element[i])) 
+		if (!isDelimetr(element[i]))
 		{
-			if (isOperation(element[i])) 
+			if (isOperation(element[i]))
 			{
-				while (!isEmpty(headOperation) && priority(headOperation->data[0]) >= priority(element[i]))
-				{
-					reverse(&headOperation);
-					headNumber = processOperation(headNumber, headOperation->data[0]);
-
-					headOperation = deleteFirst(headOperation);
-					reverse(&headOperation);
-				}
-				char* curop = new char[1];
-				memcpy(curop, &element[i], 1);
-				headOperation = insertFirst(curop, headOperation);
+				headNumber = processOperation(headNumber, element[i]);
 			}
 			else
 			{
@@ -190,23 +177,17 @@ int main()
 				{
 					i++;
 				}
-				char* operand = new char[i - start];
+				char* operand = (char*)malloc(sizeof(char) * (i - start));
 				memcpy(operand, &element[start], i - start);
 				reverse(&headNumber);
-				headNumber = insertFirst(operand, headNumber);
+				headNumber = insertFirst(atoi(operand), headNumber);
 				reverse(&headNumber);
+				free(operand);
 			}
 		}
 	}
-	reverse(&headOperation);
-	char* result = new char [1];
-	while (!isEmpty(headOperation))
-	{
-		headNumber = processOperation(headNumber, headOperation->data[0]);
-		headNumber = deleteFirst(headNumber);
-		result = headNumber->data;
-		headOperation = deleteFirst(headOperation);
-	}
-	printf("\n%s\n", result);
+	free(element);
+	headNumber = deleteFirst(headNumber);
+	printf("\n%d\n", headNumber->data);
 	return 0;
 }
