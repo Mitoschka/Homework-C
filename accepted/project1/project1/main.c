@@ -87,7 +87,7 @@ int test()
 	struct Date* arrayDate = (struct Date*)malloc(countLines* sizeof(struct Date));
 	arrayDate[0].day = 1;
 	arrayDate[0].month = 2;
-	arrayDate[0].year =	2000;
+	arrayDate[0].year = 2000;
 
 	arrayDate[1].day = 1;
 	arrayDate[1].month = 2;
