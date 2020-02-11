@@ -7,7 +7,7 @@ struct Date{
 };
 
 int readFile(char name[], struct Date *arrayDate)
-{//чтение файла построчно
+{
 	int day = 0;
 	int month = 0;
 	int year = 0;
@@ -18,7 +18,7 @@ int readFile(char name[], struct Date *arrayDate)
 	{
 		return 0;
 	}
-	while (!feof(file))//file = fopen(name, "r")) != NULL
+	while (!feof(file))
 	{
 		fscanf(file, "%d.%d.%d", &day, &month, &year);
 		arrayDate[inxOfArray].day = day;
@@ -32,7 +32,7 @@ int readFile(char name[], struct Date *arrayDate)
 }
 
 int getMaxDate(struct Date *arrayDate, int inxOfArray)
-{//поиск максимальной даты
+{
 	int inxOfMaxDate = 0;
 	int maxDay = arrayDate[0].day;
 	int maxMonth = arrayDate[0].month;
@@ -41,7 +41,6 @@ int getMaxDate(struct Date *arrayDate, int inxOfArray)
 	
 	for (int i = 1; i < inxOfArray; i++)
 	{
-		//сравниваем даты
 		if (maxYear > arrayDate[i].year)
 		{
 			tempValue = 1;
@@ -67,12 +66,12 @@ int getMaxDate(struct Date *arrayDate, int inxOfArray)
 			tempValue = 2;
 		}
 		else
-		{// даты совпадают
+		{
 			tempValue = 0;
 		}
 		
 		if (tempValue == 1)
-		{//максимальная дата
+		{
 			maxDay = arrayDate[i].day;
 			maxMonth = arrayDate[i].month;
 			maxYear = arrayDate[i].year;
@@ -81,7 +80,6 @@ int getMaxDate(struct Date *arrayDate, int inxOfArray)
 	}
 	return inxOfMaxDate;
 }
-
 
 int test()
 {
