@@ -1,75 +1,76 @@
-#include "Tree.h"
+#include "BinaryTree.h"
 #include <stdio.h>
 
 
-unsigned char height(Node* tNode) //получение высоты вершины
+unsigned char height(Node* localeNode) //получение высоты вершины
 {//если вершины нет, ответ 0 иначе высота поддерева этой вершины
-	return tNode ? tNode->height : 0;
+	return localeNode ? localeNode->height : 0;
 }
 
-int bfactor(Node* tNode)
+int difference(Node* localeNode)
 {//разность высот между сыновьями
-	return height(tNode->right) - height(tNode->left); //вычисление разницы
+	return height(localeNode->right) - height(localeNode->left); //вычисление разницы
 }
 
-void fixheight(Node* tNode)
+void fixHeight(Node* localeNode)
 {//обновим высоту, если сбалансированность нарушена
-	unsigned char hleft = height(tNode->left); //высота левого сына
-	unsigned char hright = height(tNode->right); //высота правого сына
+	unsigned char hleft = height(localeNode->left); //высота левого сына
+	unsigned char hright = height(localeNode->right); //высота правого сына
 	//высота вершины - это высота сына с макс высотой плюс 1
-	tNode->height = (hleft>hright ? hleft : hright) + 1;
+	localeNode->height = (hleft>hright ? hleft : hright) + 1;
 }
 
-Node* rotateright(Node* tNode) //правый поворот вокруг nd
+Node* rotateRight(Node* localeNode) //правый поворот вокруг nd
 {
-	Node* temp = tNode->left;
-	tNode->left = temp->right;
-	temp->right = tNode;
-	fixheight(tNode);
-	fixheight(tNode);
-	return tNode;
+	Node* temp = localeNode->left;
+	localeNode->left = temp->right;
+	temp->right = localeNode;
+	fixHeight(localeNode);
+	fixHeight(localeNode);
+	return localeNode;
 }
 
-Node* rotateleft(Node* tNode) //левый поворот вокруг nd
+Node* rotateLeft(Node* localeNode) //левый поворот вокруг nd
 {
-	Node* temp = tNode->right;
-	tNode->right = temp->left;
-	temp->left = tNode;
-	fixheight(tNode);
-	fixheight(temp);
+	Node* temp = localeNode->right;
+	localeNode->right = temp->left;
+	temp->left = localeNode;
+	fixHeight(localeNode);
+	fixHeight(temp);
 	return temp;
 }
 
-Node* balance(Node* tNode)
-{//балансировка узла tNode древа
-	fixheight(tNode);
-	if (bfactor(tNode) == 2)
+Node* balance(Node* localeNode)
+{//балансировка узла localeNode древа
+	fixHeight(localeNode);
+	if (difference(localeNode) == 2)
 	{
-		if (bfactor(tNode->right) < 0)
+		if (difference(localeNode->right) < 0)
 		{
-			tNode->right = rotateright(tNode->right);
+			localeNode->right = rotateRight(localeNode->right);
 		}
-		return rotateleft(tNode);
+		return rotateLeft(localeNode);
 	}
-	if (bfactor(tNode) == -2)
+	if (difference(localeNode) == -2)
 	{
-		if (bfactor(tNode->left) > 0)
+		if (difference(localeNode->left) > 0)
 		{
-			tNode->left = rotateleft(tNode->left);
+			localeNode->left = rotateLeft(localeNode->left);
 		}
-		return rotateright(tNode);
+		return rotateRight(localeNode);
 	}
-	return tNode; //балансировка не нужна
+	return localeNode; //балансировка не нужна
 }
 
-Node *addNode(Node *tree, char *key, char *value) {
+Node *addNode(Node *tree, char *key, char *value) 
+{
 	//добавление узлов в древо
-	int tSame = 0;
+	int tSame = 0;//для выбора ветви
 	if (tree != NULL)
 	{
-		strcmp(key, tree->key);//для выбора ветви
+		tSame = strcmp(key, tree->key);
 	}
-	
+
 	if (tree == NULL)
 	{//если дерева нет, то формируем корень
 		tree = (Node *)malloc(sizeof(Node));//память под узел
@@ -87,6 +88,7 @@ Node *addNode(Node *tree, char *key, char *value) {
 		tree->count++;
 		tree->item = strdup(value);//поле данных
 	}
+
 	//вставим в левую или правую ветви
 	else if (tSame < 0)
 	{
@@ -127,20 +129,20 @@ Node* searchByKey(Node* tree, char *key)
 	return found;
 }
 
-Node* findmin(Node* tNode) // поиск узла с минимальным ключом в дереве p 
+Node* findMin(Node* localeNode) // поиск узла с минимальным ключом в дереве p 
 {
-	return tNode->left ? findmin(tNode->left) : tNode; //если есть левый сын, идем в него иначе ответ в этой вершине
+	return localeNode->left ? findMin(localeNode->left) : localeNode; //если есть левый сын, идем в него иначе ответ в этой вершине
 }
 
-Node* removemin(Node* tNode)
+Node* removeMin(Node* localeNode)
 {//удаление узла с минимальным ключом из дерева p
 	//если нет левого сына удалим эту вершину
-	if (tNode->left == 0)
+	if (localeNode->left == 0)
 	{
-		return tNode->right;
+		return localeNode->right;
 	}
-	tNode->left = removemin(tNode->left); // иначе идем в левого сына
-	return balance(tNode); //балансируем дерево
+	localeNode->left = removeMin(localeNode->left); // иначе идем в левого сына
+	return balance(localeNode); //балансируем дерево
 }
 
 Node* removeByKey(Node* tree, char *key)
@@ -171,10 +173,18 @@ Node* removeByKey(Node* tree, char *key)
 		{
 			return ndLeft;
 		}
-		Node* min = findmin(ndRight);
-		min->right = removemin(ndRight); //правый сын минимальной вершины - это правое поддерево удаляемой без минимума
+		Node* min = findMin(ndRight);
+		min->right = removeMin(ndRight); //правый сын минимальной вершины - это правое поддерево удаляемой без минимума
 		min->left = ndLeft; //левый сын минимальной вершины - левый сын удаляемой
 		return balance(min); //балансируем меньшую вершину
 	}
 	return balance(tree); //мы ничего не нашли, балансируем дерево
+}
+
+void freeTree(Node* tree) 
+{
+	//освобождение памяти в каждом узле древа
+	if (tree->left)   freeTree(tree->left);
+	if (tree->right)  freeTree(tree->right);
+	free(tree);
 }

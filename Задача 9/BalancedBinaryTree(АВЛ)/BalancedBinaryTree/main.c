@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Tree.h"
+#include <locale.h>
+#include "BinaryTree.h"
 
 
 char *strToLower(char *value)
 {//преобразование строки в нижний регистр
 	const len = strlen(value);
-	for (int i = 0; i < len; i++)
+	for (int i = 0; i<len; i++)
 	{
 		if (value[i] >= 'A' && value[i] <= 'Z')
 		{
@@ -49,8 +50,6 @@ int menu()
 
 int test()
 {
-	//тестирование функций
-	
 	//проверка на добавление
 	Node *tree = NULL;
 	char *key = "a";
@@ -79,19 +78,18 @@ int test()
 
 int main()
 {
-	system("chcp 1251");
-
+	setlocale(LC_ALL, "RU");
 
 	if (!test())
 	{
 		printf("Тест не пройден...\n");
-		system("pause");
+		getch();
+
 	}
 	
 	Node *tree = NULL;//память под узел
-	char* key = (char*)malloc(100 *sizeof(char));//выделение памяти для ключа
-	char* value = (char*)malloc(100 *sizeof(char));//выделение памяти для значения
-
+	char *key = (char *)malloc(100*sizeof(char));//выделение памяти для ключа
+	char *value = (char *)malloc(100*sizeof(char));//выделение памяти для значения
 
 
 	int loop = 1;
@@ -111,7 +109,7 @@ int main()
 				scanf("%s", value);
 				tree = addNode(tree, key, value);
 				printf("Запись внесена!\n");
-				system("pause");
+				getch();
 				break;
 			}
 
@@ -131,10 +129,10 @@ int main()
 				{
 					printf("Запись не найдена!\n");
 				}
-				system("pause");
+				getch();
 				break;
 			}
-			
+				
 
 			case 3:
 			{
@@ -152,7 +150,7 @@ int main()
 				{
 					printf("Такого ключа нет!\n");
 				}
-				system("pause");
+				getch();				
 				break;
 			}
 				
@@ -164,7 +162,7 @@ int main()
 				scanf("%s", key);
 				key = strToLower(key);
 				tree = removeByKey(tree, key);
-				system("pause");
+				getch();
 				break;
 			}
 				
@@ -179,11 +177,11 @@ int main()
 				printf("Неверный выбор...\n");
 				break;
 			}
-			
+				
 		}//switch
 	}//while 
 
-	free(tree);
+	freeTree(tree);
 	free(value);
 	free(key);
 	
