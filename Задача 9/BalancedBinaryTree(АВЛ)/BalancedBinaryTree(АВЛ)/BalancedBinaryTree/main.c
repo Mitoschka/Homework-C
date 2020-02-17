@@ -3,6 +3,7 @@
 #include <locale.h>
 #include "BinaryTree.h"
 
+
 char *strToLower(char *value)
 {//преобразование строки в нижний регистр
 	const len = strlen(value);
@@ -146,9 +147,10 @@ int main()
 				{
 					printf("Такого ключа нет!\n");
 				}
+				
 				break;
 			}
-
+				
 			case 4:
 			{
 				printf("УДАЛЕНИЕ ДАННЫХ\n");
@@ -158,7 +160,7 @@ int main()
 				tree = removeByKey(tree, key);
 				break;
 			}
-
+				
 			case 5:
 			{
 				loop = 0;
@@ -175,6 +177,7 @@ int main()
 	}
 
 	freeTree(tree);
+	free(searchKey);
 	free(value);
 	free(key);
 	
