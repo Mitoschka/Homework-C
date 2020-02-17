@@ -1,164 +1,151 @@
-﻿#include <stdlib.h>
-#include <stdio.h>
+﻿#include <iostream>
+#include <time.h>
+#include <stdlib.h>
 
-void generationArray(int* massif, int size)
+const int sizeArray = 15; // размер массива
+const int randomNumbRange = 4; // диапазон случайных чисел
+
+void generationArray(int arrayOfNumbers[]) // функция, которая принимает массив и заполняет его случайными значениями
 {
-	for (int i = 0; size > i; ++i)
+	for (int i = 0; i != sizeArray; i++)
 	{
-		massif[i] = rand() % 10 - 5;
-		printf("%d, ", massif[i]);
+		arrayOfNumbers[i] = rand() % randomNumbRange;
 	}
 }
 
-void qsortArray(int* supportingElement, int first, int last)
+void printArray(int arrayOfNumbers[]) // вывод элементов массива на экран
 {
-	if (first < last)
+	for (int i = 0; i != sizeArray; i++)
 	{
-		int left = first, right = last, middle = supportingElement[(left + right) / 2];
-		do
+		printf("%d\n", arrayOfNumbers[i]);
+	}
+}
+
+void insertSortArray(int arrayOfNumbers[], int first, int last) // алгоритм сортировки вставками
+{
+	for (int i = first + 1; i != last + 1; ++i)
+	{
+		int j = i;
+		while (j > 1 && arrayOfNumbers[j] < arrayOfNumbers[j - 1])
 		{
-			while (supportingElement[left] < middle) left++;
-			while (supportingElement[right] > middle) right--;
-			if (left <= right)
-			{
-				int tmp = supportingElement[left];
-				supportingElement[left] = supportingElement[right];
-				supportingElement[right] = tmp;
-				left++;
-				right--;
-			}
-		} while (left <= right);
-		qsortArray(supportingElement, first, right);
-		qsortArray(supportingElement, left, last);
-	}
-}
-
-void arraySorting(int* massif, int size)
-{
-	generationArray(massif, size);
-	qsortArray(massif, 0, size - 1);
-	printf("\n\nSorted array:\n");
-	for (int i = 0; i < size; i++)
-	{
-		printf("%d ", massif[i]);
-	}
-}
-
-int differentiationOfNumber(int* firstArray, int size)
-{
-	int* secondArray = new int[size];
-	for (int i = 1; i < size; i++)
-	{
-		secondArray[i] = firstArray[i] - firstArray[i - 1];
-	}
-	secondArray[0] = firstArray[0];
-
-	bool flag = false;
-	int maxLen = 0;
-	int maxIndex = 0;
-	int len = 0;
-	int index = 0;
-	for (int i = 0; i < size; i++)
-	{
-		if (secondArray[i] == 0 && flag)
-		{
-			len++;
-			continue;
+			int temp = arrayOfNumbers[j];
+			arrayOfNumbers[j] = arrayOfNumbers[j - 1];
+			arrayOfNumbers[j - 1] = temp;
+			--j;
 		}
-		if (secondArray[i] == 0)
+	}
+
+}
+
+int partition(int arrayOfNumbers[], int first, int last) // функция нахождения разделителя
+{
+	int temporaryPivot = arrayOfNumbers[first]; // элемент, являющийся разделителем
+	int i = first;
+	int j = i;
+	for (i = first + 1; i != last + 1; ++i)
+	{
+		if (arrayOfNumbers[i] <= temporaryPivot)
 		{
-			len++;
-			index = i;
-			flag = true;
+			++j;
+			int temp = arrayOfNumbers[j];
+			arrayOfNumbers[j] = arrayOfNumbers[i];
+			arrayOfNumbers[i] = temp;
+		}
+	}
+	int temp = arrayOfNumbers[first];
+	arrayOfNumbers[first] = arrayOfNumbers[j];
+	arrayOfNumbers[j] = temp;
+	return j;
+}
+
+void qSortArray(int arrayOfNumbers[], int first, int last) // алгоритм быстрой сортировки
+{
+	if (first >= last)
+	{
+		return;
+	}
+	if (last - first < 10) // если элементов в куске массива меньше 10, то
+	{
+		insertSortArray(arrayOfNumbers, first, last); // вызываем процедуру алгоритма вставками
+	}
+	else
+	{
+		int pivot = partition(arrayOfNumbers, first, last); // разделитель
+		qSortArray(arrayOfNumbers, first, pivot - 1);
+		qSortArray(arrayOfNumbers, pivot + 1, last);
+	}
+}
+
+int oftenElement(int arrayOfNumbers[]) // функция, возвращающая наиболее часто встречающийся элемент
+{
+	int counter = 0;
+	int maxCounter = 0;
+	int tempOftenElement = arrayOfNumbers[1];
+	for (int i = 0; i != sizeArray - 1; ++i)
+	{
+		if (arrayOfNumbers[i] == arrayOfNumbers[i + 1])
+		{
+			++counter;
 		}
 		else
 		{
-			if (maxLen <= len)
+			if (counter > maxCounter)
 			{
-				maxLen = len;
-				maxIndex = index;
+				maxCounter = counter;
+				tempOftenElement = arrayOfNumbers[i];
 			}
-			len = 0;
-			flag = false;
+			counter = 0;
 		}
 	}
-	delete[] secondArray;
-	return firstArray[maxIndex];
+	return tempOftenElement;
 }
 
-void  printDifferentiationOfNumber()
+bool testQSort(int testArray[], int correctArray[])
 {
-	int size = 0;
-	int number = 0;
-	printf("Enter the size of the array: ");
-	scanf("%d", &size);
-	int* firstArray = new int[size];
-	arraySorting(firstArray, size);
-	differentiationOfNumber(firstArray, size);
-	printf("\n%d\n", differentiationOfNumber(firstArray, size));
-	delete[] firstArray;
-}
-
-bool differentiationTest(int* firstArray, int secondArray, int size)
-{
-	differentiationOfNumber(firstArray, size);
-	int result = differentiationOfNumber(firstArray, size);
-	return result == secondArray;
-}
-
-bool sortTest(int len, int array[], int sortedArray[])
-{
-	qsortArray(array, 0, len - 1);
-	for (int i = 0; i < len; ++i)
+	qSortArray(testArray, 0, sizeArray - 1);
+	for (int i = 0; i != sizeArray; ++i)
 	{
-		if (array[i] != sortedArray[i])
+		if (testArray[i] != correctArray[i])
 		{
 			return false;
-
 		}
 	}
 	return true;
 }
 
+bool testOftenElement(int testArray[], int correctElement)
+{
+	qSortArray(testArray, 0, sizeArray - 1);
+	return oftenElement(testArray) == correctElement;
+}
+
 int main()
 {
-	int  differentiationTestArray[] = { -4, -3, 0, 1, 1, 1, -5, -5, -4, 1 };
-	int maxIndex = 1;
-	if (!differentiationTest(differentiationTestArray, maxIndex, 10))
+	int sortTestArray[] = { 0, 3, 4, 1, 2, 10, 9, 8, 11, 5, 12, 7, 6, 14, 13 };
+	int sortTestCorrectArray[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+
+	if (!testQSort(sortTestArray, sortTestCorrectArray))
 	{
-		printf("error");
-		return 1;
+		printf("qsort test failed\n");
 	}
 
-	int arrayFirstTest[] = { 5, -2, 8, 0, 1 };
-	int sortedArrayFirst[] = { -2, 0, 1, 5, 8 };
-	if (!sortTest(5, arrayFirstTest, sortedArrayFirst))
-	{
-		printf("Error");
-		return 1;
-	}
-	const int length = 1000;
+	int oftenTestArray[] = { 0, 3, 3, 1, 2, 1, 2, 1, 1, 5, 12, 1, 3, 1, 13 };
+	int correctOften = 1;
 
-	int a[length]{};
-
-	for (int i = 0; i < length; i++)
+	if (!testOftenElement(oftenTestArray, correctOften))
 	{
-		a[i] = 1;
+		printf("oftenElement test failed");
 	}
 
-	int correctArray[length]{};
+	int arrayOfNumbers[sizeArray];
 
-	for (int i = 0; i < length; i++)
-	{
-		correctArray[i] = 1;
-	}
+	printf("Array:\n");
+	generationArray(arrayOfNumbers);
+	printArray(arrayOfNumbers);
 
-	qsortArray(a, 0, length - 1);
-	if (!sortTest(length, a, correctArray))
-	{
-		printf("Error");
-		return 1;
-	}
-	printDifferentiationOfNumber();
+	qSortArray(arrayOfNumbers, 0, sizeArray - 1);
+
+	printf("The most often element: %d\n", oftenElement(arrayOfNumbers));
+
 	return 0;
 }
