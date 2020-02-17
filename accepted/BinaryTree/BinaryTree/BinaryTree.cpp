@@ -1,19 +1,14 @@
 #include "BinaryTree.h"
 #include <stdio.h>
 
-
-
-
-
-Node *addNode(Node *tree, int key, char *value) {
+Node *addNode(Node *tree, int key, char *value) 
+{
 	//добавление узлов в древо
-
 	if (tree == NULL)
 	{//если дерева нет, то формируем корень
-		tree = (Node *)malloc(sizeof(Node));//память под узел
+		tree = (Node*)malloc(sizeof(Node));//память под узел
 		tree->key = key;//ключ
 		tree->item = strdup(value);//поле данных
-		tree->count = 1;
 		//инициализация ветвей пустыми
 		tree->left = NULL;
 		tree->right = NULL;
@@ -22,7 +17,6 @@ Node *addNode(Node *tree, int key, char *value) {
 	//один и тот же ключ, заменим значение
 	else if (key == tree->key)
 	{
-		tree->count++;
 		tree->item = strdup(value);//поле данных
 	}
 
@@ -60,10 +54,10 @@ Node* searchByKey(Node* tree, int key)
 	{
 		found = searchByKey(tree->right, key);
 	}
-
 	//ключ не найден
 	return found;
 }
+
 
 Node* findMin(Node* localeNode) // поиск узла с минимальным ключом в дереве p 
 {
@@ -73,7 +67,7 @@ Node* findMin(Node* localeNode) // поиск узла с минимальным ключом в дереве p
 Node* removeMin(Node* localeNode)
 {//удаление узла с минимальным ключом из дерева p
 	//если нет левого сына удалим эту вершину
-	if (localeNode->left == 0)
+	if (localeNode->left == NULL)
 	{
 		return localeNode->right;
 	}
@@ -88,7 +82,6 @@ Node* removeByKey(Node* tree, int key)
 	{
 		return NULL;
 	}
-	
 	//если элемент меньше вершины идем в левого сына
 	if (key < tree->key)
 	{
@@ -101,25 +94,32 @@ Node* removeByKey(Node* tree, int key)
 	}
 	else
 	{//мы пришли в вершину, которую нужно удалить		
-		Node* ndLeft = tree->left;
-		Node* ndRight = tree->right;
+		Node* nodeLeft= tree->left;
+		Node* nodeRight = tree->right;
 		free(tree);//физическое удаление вершины	
 		printf("Запись удалена...\n");
-		if (!ndRight)
+		if (!nodeRight)
 		{
-			return ndLeft;
+			return nodeLeft;
 		}
-		Node* min = findMin(ndRight);
-		min->right = removeMin(ndRight); //правый сын минимальной вершины - это правое поддерево удаляемой без минимума
-		min->left = ndLeft; //левый сын минимальной вершины - левый сын удаляемой
-		return min; //балансируем меньшую вершину
+		Node* min = findMin(nodeRight);
+		min->right = removeMin(nodeRight); //правый сын минимальной вершины - это правое поддерево удаляемой без минимума
+		min->left = nodeLeft; //левый сын минимальной вершины - левый сын удаляемой
+		return min;
 	}
-	return tree; //мы ничего не нашли, балансируем дерево
+	return tree; 
 }
 
-void freeTree(Node* tree) {
+void freeTree(Node* tree) 
+{
 	//освобождение памяти в каждом узле древа
-	if (tree->left)   freeTree(tree->left);
-	if (tree->right)  freeTree(tree->right);
+	if (tree->left)
+	{
+		freeTree(tree->left);
+	}
+	if (tree->right)
+	{
+		freeTree(tree->right);
+	}
 	free(tree);
 }
