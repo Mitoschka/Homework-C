@@ -1,7 +1,6 @@
 #include "BinaryTree.h"
 #include <stdio.h>
 
-
 unsigned char height(Node* localeNode) //получение высоты вершины
 {//если вершины нет, ответ 0 иначе высота поддерева этой вершины
 	return localeNode ? localeNode->height : 0;
@@ -66,10 +65,10 @@ Node* balance(Node* localeNode)
 Node *addNode(Node *tree, char *key, char *value) 
 {
 	//добавление узлов в древо
-	int tSame = 0;//для выбора ветви
+	int same = 0;//для выбора ветви
 	if (tree != NULL)
 	{
-		tSame = strcmp(key, tree->key);
+		same = strcmp(key, tree->key);
 	}
 
 	if (tree == NULL)
@@ -84,14 +83,14 @@ Node *addNode(Node *tree, char *key, char *value)
 	}
 	//определяем ветвь для вставки данных
 	//один и тот же ключ, заменим значение
-	else if (tSame == 0)
+	else if (same == 0)
 	{
 		tree->count++;
 		tree->item = strdup(value);//поле данных
 	}
 
 	//вставим в левую или правую ветви
-	else if (tSame < 0)
+	else if (same < 0)
 	{
 		tree->left = addNode(tree->left, key, value);
 	}
@@ -104,28 +103,27 @@ Node *addNode(Node *tree, char *key, char *value)
 
 Node* searchByKey(Node* tree, char *key)
 {//поиск узла по заданному ключу
-	int tSame;
+	int same;
 	Node *found = NULL;
 	if (tree == NULL)
 	{
 		return tree;
 	}
 	//узел найден по ключу
-	if ((tSame = strcmp(key, tree->key)) == 0)
+	if ((same = strcmp(key, tree->key)) == 0)
 	{
 		found = tree;
 		return found;
 	}
 	//выбор направления поиска по ключу
-	else if (tSame < 0 && tree->left != NULL)
+	else if (same < 0 && tree->left != NULL)
 	{
 		found = searchByKey(tree->left, key);
 	}
-	else if (tSame > 0 && tree->right != NULL)
+	else if (same > 0 && tree->right != NULL)
 	{
 		found = searchByKey(tree->right, key);
 	}
-
 	//ключ не найден
 	return found;
 }
@@ -153,14 +151,14 @@ Node* removeByKey(Node* tree, char *key)
 	{
 		return NULL;
 	}
-	int tSame = strcmp(key, tree->key);
+	int same = strcmp(key, tree->key);
 	//если элемент меньше вершины идем в левого сына
-	if (tSame < 0)
+	if (same < 0)
 	{
 		tree->left = removeByKey(tree->left, key);
 	}
 	//если элемент больше вершины, идем в правого сына
-	else if (tSame > 0)
+	else if (same > 0)
 	{
 		tree->right = removeByKey(tree->right, key);
 	}
@@ -185,8 +183,17 @@ Node* removeByKey(Node* tree, char *key)
 void freeTree(Node* tree) 
 {
 	//освобождение памяти в каждом узле древа
-	if (tree == NULL) return;
-	if (tree->left)   freeTree(tree->left);
-	if (tree->right)  freeTree(tree->right);
+	if (tree == NULL)
+	{
+		return;
+	}
+	if (tree->left)
+	{
+		freeTree(tree->left);
+	}
+	if (tree->right)
+	{
+		freeTree(tree->right);
+	}
 	free(tree);
 }

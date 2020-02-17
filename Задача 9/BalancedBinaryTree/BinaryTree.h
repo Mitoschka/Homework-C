@@ -1,6 +1,5 @@
 #pragma once
 
-
 typedef struct BinaryTree
 {
 	int count;//число вхождений

@@ -30,7 +30,7 @@ int menu()
 	printf("5. Выход\n");
 	printf("Input number: ");
 
-	char *choose = (char*)malloc(100 *sizeof(char));//выделение памяти для ключа;
+	char *choose = (char *)malloc(100*sizeof(char));//выделение памяти для ключа;
 	scanf("%s", choose);
 	//возврат выбранного пункта меню
 	if (choose < '0' && choose >'9')
@@ -74,7 +74,10 @@ int test()
 		return 0;
 	}
 	free(value);
-	if (tree != NULL) free(tree);
+	if (tree != NULL)
+	{
+		free(tree);
+	}
 	return 1;
 }
 
@@ -130,6 +133,7 @@ int main()
 				}
 				break;
 			}
+				
 
 			case 3:
 			{
@@ -148,7 +152,7 @@ int main()
 				}
 				break;
 			}
-
+				
 			case 4:
 			{
 				printf("УДАЛЕНИЕ ДАННЫХ\n");
@@ -158,7 +162,7 @@ int main()
 				tree = removeByKey(tree, key);
 				break;
 			}
-
+				
 			case 5:
 			{
 				loop = 0;
@@ -172,7 +176,7 @@ int main()
 			}
 				
 		}
-	}
+	} 
 
 	freeTree(tree);
 	free(value);
