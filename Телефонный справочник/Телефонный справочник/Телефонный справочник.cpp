@@ -84,7 +84,7 @@ Person* numSearch(int personName, char* nameFinder, Person* people)
 	for (int i = 0; i < personName; i++)
 	{
 		Person personVal = people[i];
-		if (strcmp(nameFinder, personVal.name)==0)
+		if (strcmp(nameFinder, personVal.name) == 0)
 		{
 			return &people[i];
 		}
@@ -116,7 +116,7 @@ Person* nameSearch(int personNum, char* numFinder, Person* people)
 	for (int i = 0; i < personNum; i++)
 	{
 		Person personVal = people[i];
-		if (strcmp(numFinder, personVal.num)==0)
+		if (strcmp(numFinder, personVal.num) == 0)
 		{
 			return &people[i];
 		}
@@ -166,8 +166,8 @@ int load(Person* people)
 bool nameSearchTest(int personNum, char* numFinder, Person* test)
 {
 	Person* result = nameSearch(personNum, numFinder, test);
-	int temporaryVariable = strlen(numFinder);
-	for (int i = 0; i <= temporaryVariable; i++)
+	int lineLength = strlen(numFinder);
+	for (int i = 0; i <= lineLength; i++)
 	{
 		if (numFinder[i] != result->num[i])
 		{
@@ -180,8 +180,8 @@ bool nameSearchTest(int personNum, char* numFinder, Person* test)
 bool numSearchTest(int personName, char* nameFinder, Person* test)
 {
 	Person* result = numSearch(personName, nameFinder,test);
-	int temporaryVariable = strlen(nameFinder);
-	for (int i = 0; i <= temporaryVariable; i++)
+	int lineLength = strlen(nameFinder);
+	for (int i = 0; i <= lineLength; i++)
 	{
 		if (nameFinder[i] != result->name[i])
 		{
@@ -210,7 +210,7 @@ int main()
 
 	Person people[100];
 	FILE* phonebook = fopen("Phonebook.txt", "r+t");
-	setlocale(LC_ALL, "Russian");
+	setlocale(LC_ALL, "Rus");
 	printf("Это телефонный справочник\n");
 	int counter = load(people);
 	char act = '0';
@@ -221,19 +221,54 @@ int main()
 			printf("\nВызов инструкции осуществляется по номеру 6\nВведите номер команды: ");
 		}
 		scanf("%c", &act);
+
 		switch (act)
 		{
-		case '0': {exit(phonebook); return 0;}
-		case '1': {counter = addPerson(counter,people);break;}
-		case '2': {print(phonebook);break;}
-		case '3': {printNumSearch(counter, people);break;}
-		case '4': {printNameSearch(counter, people);break;}
-		case '5': {saveNote(counter, people);break;}
-		case '6': {printf(" 0 - выйти\n 1 - добавить запись (имя и телефон)\n \
-							2 - распечатать все имеющиеся записи\n 3 - найти имя по телефону \n \
-							4 - найти телефон по имени \n 5 - сохранить текущие данные в файл \n");break;}
-		case '\n': {break;}
-		default: {printf("Я не знаю такой команды, вызовите инструкцию\n");}
+			case '0':
+			{
+				exit(phonebook);
+				return 0;
+			}
+			case '1':
+			{
+				counter = addPerson(counter,people);
+				break;
+			}
+			case '2': 
+			{
+				print(phonebook);
+				break;
+			}
+			case '3': 
+			{
+				printNumSearch(counter, people);
+				break;
+			}
+			case '4': 
+			{
+				printNameSearch(counter, people);
+				break;
+			}
+			case '5': 
+			{
+				saveNote(counter, people);
+				break;
+			}
+			case '6': 
+			{
+				printf("0 - выйти\n 1 - добавить запись (имя и телефон)\n \
+						2 - распечатать все имеющиеся записи\n 3 - найти имя по телефону \n \
+						4 - найти телефон по имени \n 5 - сохранить текущие данные в файл \n");
+				break;
+			}
+			case '\n': 
+			{
+				break;
+			}
+			default: 
+			{
+				printf("Я не знаю такой команды, вызовите инструкцию\n");
+			}
 		}
 	}
 	fclose(phonebook);
