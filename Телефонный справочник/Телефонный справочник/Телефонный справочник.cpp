@@ -62,7 +62,7 @@ void print(FILE* phonebook)
 {
 	char string[100];
 	int numOfLines = 0;
-	if ((phonebook = fopen("Phonebook.txt", "r")) == nullptr)
+	if ((fopen("Phonebook.txt", "r")) == nullptr)
 	{
 		printf("error\n");
 	}
