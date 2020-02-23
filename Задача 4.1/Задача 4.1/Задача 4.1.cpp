@@ -1,166 +1,221 @@
-﻿#include <stdio.h>
-#include <stdlib.h>
-#include <locale.h>
+﻿#include <iostream>
 
-const int size = sizeof(int)*8;
+const int numberOfDigits = 10; // максимальный размер массива для хранения двоичного представления числа
 
-void showBinaryNumber(int* bin)
+struct BinaryNumber // класс двоичных чисел
 {
-	printf("В двоичной системе: ");
-	for (int i = size - 1; i >= 0; i--)
+	BinaryNumber()
 	{
-		printf("%d", bin[i]);
+		for (int i = 0; i != numberOfDigits; ++i)
+		{
+			arrayNumber[i] = false;
+		}
 	}
-	printf("\n");
+	bool arrayNumber[numberOfDigits]; // представление двоичного числа в виде массива
+};
+
+int powerOfTwo(int degree)
+{
+	int result = 1;
+	for (int i = 0; i != degree; ++i)
+	{
+		result *= 2;
+	}
+	return result;
 }
 
-void makeBinary(int binaryNum, int* res)
+void reverseDigits(BinaryNumber* binNumber)
 {
-	bool isNegative = binaryNum < 0;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i != numberOfDigits - 1; ++i)
 	{
-		res[i] = (binaryNum >> i) & 1;
-	}
-}
-
-int makeDecimal(int* bin)
-{
-	bool isNegative = bin[size - 1] == 1;
-	if (isNegative)
-	{
-		int deductible = 1;
-		for (int i = 0; i < size; i++)
-		{
-			bin[i] = (bin[i] - deductible) & 1;
-			if (bin[i] == 0)
-			{
-				deductible = 0;
-			}
-		}
-		for (int i = size - 1; i >= 0; i--)
-		{
-			bin[i] = 1 - bin[i];
-		}
-	}
-	int res = 0;
-	int powerTwo[size] = { 1 };
-	for (int i = 1; i < size; i++)
-	{
-		powerTwo[i] = powerTwo[i - 1] * 2;
-	}
-	for (int i = 0; i < size; i++)
-	{
-		res += powerTwo[i] * bin[i];
-	}
-	res = isNegative ? -res : res;
-	return res;
- }
-
-void enterNumber(int* binaryNum)
-{
-	int num = 0;
-	printf("Введите целое десятичное число: ");
-	scanf("%d", &num);
-	makeBinary(num, binaryNum);
-	showBinaryNumber(binaryNum);
-}
-
-void binarySum(int* binaryNum1, int* binaryNum2, int* res)
-{
-	int addition = 0;
-	for (int i = 0; i < size; i++)
-	{
-		res[i] = (binaryNum1[i] + binaryNum2[i] + addition) & 1;
-		if (res[i] == 0 && binaryNum1[i] + binaryNum2[i] + addition != 0)
-		{
-			addition = 1;
-		}
-		else
-		{
-			addition = 0;
-		}
+		binNumber->arrayNumber[i] = !binNumber->arrayNumber[i];
 	}
 }
 
-bool testMakeDecimal(int* bin, int testNum)
+void printBinaryNumber(BinaryNumber* binNumber) // вывод двоичного числа на экран
 {
-	return testNum == makeDecimal(bin);
+	for (int i = numberOfDigits - 1; i != -1; --i)
+	{
+		printf("%d", binNumber->arrayNumber[i]);
+	}
 }
 
-bool testBinarySum(int* binaryNum1, int* binaryNum2, int* testArray)
+void plusBinaryOne(BinaryNumber* number)
 {
-	int* resArray = new int[size]();
-	binarySum(binaryNum1, binaryNum2, resArray);
-	for (int i = 0; i < size; i++)
+	BinaryNumber* binOne = new BinaryNumber;
+	binOne->arrayNumber[0] = true;
+	bool tempDigit = false;
+	for (int i = 0; i != numberOfDigits - 1; ++i)
 	{
-		if (resArray[i] != testArray[i])
-		{
-			delete[] resArray;
-			return false;
-		}
-
+		int tempResultDigit = number->arrayNumber[i] + binOne->arrayNumber[i] + tempDigit; // складываем побитово оба числа и учитываем перенос
+		number->arrayNumber[i] = tempResultDigit % 2;
+		tempDigit = tempResultDigit / 2;
 	}
-	delete[] resArray;
-	return true;
 }
 
-bool testMakeBinary(int binaryNum, int* testArray)
-{
-	int* resArray = new int[size]();
-	makeBinary(binaryNum, resArray);
-	for (int i = 0; i < size; i++)
+void sumOfTwoBinaryNumbers(BinaryNumber* firstNumber, BinaryNumber* secondNumber) // сложение двух двоичных чисел, результат записывается в 
+{																			// первое(!!!) число
+	bool tempDigit = false; // переменная, отвечающая за битовый перенос
+	for (int i = 0; i != numberOfDigits; ++i)
 	{
-		if (resArray[i] != testArray[i])
-		{
-			delete[] resArray;
-			return false;
-		}
-
+		int tempResultDigit = firstNumber->arrayNumber[i] + secondNumber->arrayNumber[i] + tempDigit; // складываем побитово оба числа и учитываем перенос
+		firstNumber->arrayNumber[i] = tempResultDigit % 2;
+		tempDigit = tempResultDigit / 2;
 	}
-	delete[] resArray;
-	return true;
+}
+
+void decToBin(int decNumber, BinaryNumber* binNumber) // перевод десятичного числа в двоичное
+{
+	bool isPositive = (decNumber >= 0);
+	if (!isPositive)
+	{
+		decNumber = decNumber * (-1);
+	}
+
+	int i = 0;
+
+	while (decNumber != 0) // пока число не равно нулю
+	{
+		binNumber->arrayNumber[i] = decNumber % 2; // записываем остаток деления на два
+		++i;                                 // переходим на следующий разряд
+		decNumber /= 2;
+	}
+
+	if (!isPositive)
+	{
+		reverseDigits(binNumber);
+		binNumber->arrayNumber[numberOfDigits - 1] = true; //обозначили, что это отрицательное число
+		plusBinaryOne(binNumber);
+	}
+}
+
+int binToDec(BinaryNumber* number) // перевод двоичного числа в десятичное
+{
+	int resultInDec = 0;
+	bool isPositive = !number->arrayNumber[numberOfDigits - 1];
+	if (!isPositive)
+	{
+		reverseDigits(number);
+		plusBinaryOne(number);
+	}
+	for (int i = 0; i != numberOfDigits - 1; ++i)
+	{
+		resultInDec += number->arrayNumber[i] * powerOfTwo(i);
+	}
+	if (!isPositive)
+	{
+		resultInDec *= -1;
+	}
+	return resultInDec;
 }
 
 bool test()
 {
-	int num = 5;
-	int testBinaryNumFirst[size] = {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	int testBinaryNumSecond[size] = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	int testBinarySumValue[size] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	if (!testMakeBinary(num, testBinaryNumFirst))
+	bool isPassed = true;
+	int testDecNumber = -117;
+	bool correctBinary[] = { true, true, false, true, false, false, false, true, true, true };
+	BinaryNumber* testBinaryNumber = new BinaryNumber;
+	decToBin(testDecNumber, testBinaryNumber);
+	for (int i = 0; i != numberOfDigits; ++i)
 	{
-		return false;
+		if (correctBinary[i] != testBinaryNumber->arrayNumber[i])
+		{
+			isPassed = false;
+			printf("decToBin test failed\n");
+			break;
+		}
 	}
-	if (!testBinarySum(testBinaryNumFirst, testBinaryNumSecond, testBinarySumValue))
+
+	bool testBinary[] = { false, false, true, true, true, false, true, false, false, false };
+	int correctDecNumber = 92;
+	for (int i = 0; i != numberOfDigits; ++i)
 	{
-		return false;
+		testBinaryNumber->arrayNumber[i] = testBinary[i];
 	}
-	if (!testMakeDecimal(testBinaryNumFirst, num))
+	if (correctDecNumber != binToDec(testBinaryNumber))
 	{
-		return false;
+		isPassed = false;
+		printf("binToDec test failed\n");
 	}
-	return true;
+
+	bool testCorrectPlusOne[] = { true, false, true, true, true, false, true, false, false, false };
+	plusBinaryOne(testBinaryNumber);
+	for (int i = 0; i != numberOfDigits; ++i)
+	{
+		if (testCorrectPlusOne[i] != testBinaryNumber->arrayNumber[i])
+		{
+			isPassed = false;
+			printf("plusBinaryOne test failed\n");
+			break;
+		}
+	}
+
+	int testDec1 = -43;
+	int testDec2 = 78;
+	BinaryNumber* testBin1 = new BinaryNumber;
+	BinaryNumber* testBin2 = new BinaryNumber;
+	decToBin(testDec1, testBin1);
+	decToBin(testDec2, testBin2);
+	sumOfTwoBinaryNumbers(testBin1, testBin2);
+	bool correctSum[] = { true, true, false, false, false, true, false, false, false, false };
+	for (int i = 0; i != numberOfDigits; ++i)
+	{
+		if (correctSum[i] != testBin1->arrayNumber[i])
+		{
+			isPassed = false;
+			printf("sumOfTwo test failed\n");
+			break;
+		}
+	}
+
+	return isPassed;
 }
 
-int main(int argc, char* argv[])
+int main()
 {
-	setlocale(0, "RUS");
+	setlocale(LC_ALL, "Russian");
+
 	if (!test())
 	{
-		printf("Error");
-		return 1;
+		printf("Некоторые тесты не пройдены.");
+		return 0;
 	}
-	int* binaryNum1 = new int[size]();
-	enterNumber(binaryNum1);
-	int* binaryNum2 = new int[size]();
-	enterNumber(binaryNum2);
-	int* binSum = new int[size]();
-	binarySum(binaryNum1, binaryNum2, binSum);
-	printf("Сумма:\n");
-	showBinaryNumber(binSum);
-	printf("В десятичной системе: %d", makeDecimal(binSum));
-	delete[] binaryNum1; 
-	delete[] binaryNum2;
-	delete[] binSum;
+
+	int maximum = (powerOfTwo(numberOfDigits - 1) - 1) / 2 - 1;
+	int minimum = -powerOfTwo(numberOfDigits - 1) / 2 + 1;
+
+	int firstDecNumber = 0;
+	int secondDecNumber = 0;
+
+	printf("Введите два числа в промежутке от %d до %d: ", minimum, maximum);
+	scanf("%d\n%d", &firstDecNumber, &secondDecNumber);
+
+	while (firstDecNumber < minimum || firstDecNumber > maximum || secondDecNumber < minimum || secondDecNumber > maximum)
+	{
+		printf("Числа должны быть в промежутке от %d до %d. Попробуйте еще раз: ", minimum, maximum);
+		scanf("%d, %d", &firstDecNumber, &secondDecNumber);
+	}
+
+	BinaryNumber* firstBinaryNumber = new BinaryNumber;
+	BinaryNumber* secondBinaryNumber = new BinaryNumber;
+
+	decToBin(firstDecNumber, firstBinaryNumber);
+	decToBin(secondDecNumber, secondBinaryNumber);
+
+	printf("Число %d в двоичном представлении (дополнительный код): ", firstDecNumber);
+	printBinaryNumber(firstBinaryNumber);
+	printf("\n");
+
+	printf("Число %d в двоичном представлении (дополнительный код): ", secondDecNumber);
+	printBinaryNumber(secondBinaryNumber);
+	printf("\n");
+
+	printf("Сумма чисел в двоичном представлении (дополнительный код): ");
+	sumOfTwoBinaryNumbers(firstBinaryNumber, secondBinaryNumber);
+	printBinaryNumber(firstBinaryNumber);
+	printf("\n");
+
+	printf("Сумма чисел в десятичном представлении: %d", binToDec(firstBinaryNumber));
+
 	return 0;
 }
