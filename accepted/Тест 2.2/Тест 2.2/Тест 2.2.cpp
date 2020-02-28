@@ -1,170 +1,126 @@
-﻿#include <iostream>
+﻿#include <stdio.h>
+#include  <iostream>
+#include "MyStack.h"
 
-struct ListElement
+bool test()
 {
-	int value;
-	int position;
-	ListElement* next;
-};
+	bool isCorrect = true;
+	MyStack* testStack = createStack();
+	int testValue1 = 1;
+	int testValue2 = 2;
+	int testValue3 = 3;
+	addElementInStack(testStack, testValue1);
+	addElementInStack(testStack, testValue2);
 
-struct List
-{
-	ListElement* head = nullptr;
-	int count = 0;
-};
-
-void addElement(List* list)
-{
-	int value = 0;
-	int position = 0;
-	printf("Введите значение добавляемого элемента: ");
-	scanf("%d", &value);
-	printf("Введите позицию, в которую хотите добавить элемент: ");
-	scanf("%d", &position);
-
-	if (position > list->count)
+	if (deleteElementFromStack(testStack) != testValue2 || deleteElementFromStack(testStack) != testValue1)
 	{
-		printf("В данную позицию нельзя добавить элемент.\n");
-		return;
+		printf("Тест 1 не пройдент\n");
+		isCorrect = false;
 	}
 
-	ListElement* listElement = new ListElement;
-	listElement->value = value;
-	listElement->position = position;
-	listElement->next = list->head;
-	list->head = listElement;
-	while (listElement->next != nullptr && listElement->position > listElement->next->position)
+	if (!isEmpty(testStack))
 	{
-		int temp = listElement->value;
-		listElement->value = listElement->next->value;
-		listElement->next->value = temp;
-
-		temp = listElement->position;
-		listElement->position = listElement->next->position;
-		listElement->next->position = temp;
-
-		listElement = listElement->next;
-	}
-	++list->count;
-}
-
-void deleteElement(List* list)
-{
-	if (list->count == 0)
-	{
-		printf("Список пуст.\n");
-		return;
-	}
-	int position = 0;
-	printf("Введите позицию, из которой нужно удалить элемент: ");
-	scanf("%d", &position);
-
-	if (position >= list->count)
-	{
-		printf("Такой позиции нет в списке.\n");
-		return;
+		printf("Тест 2 не пройден\n");
+		isCorrect = false;
 	}
 
-	if (position == 0)
-	{
-		ListElement* tempListElement = new ListElement;
-		tempListElement = list->head;
-		list->head = list->head->next;
-		delete tempListElement;
-	}
-	else
-	{
-		ListElement* listElement = list->head;
-		while (listElement->next->position != position)
-		{
-			if (listElement->next->position != position)
-			{
-				listElement = listElement->next;
-			}
-		}
-		ListElement* tempListElement = new ListElement;
-		tempListElement = listElement->next;
-		listElement->next = tempListElement->next;
-		delete tempListElement;
-	}
-	--list->count;
-}
+	addElementInStack(testStack, testValue1);
 
-void changePositions(List* list)
-{
-	ListElement* listElement = new ListElement;
-	listElement = list->head;
-	int tempPosition = 0;
-	while (listElement != nullptr)
+	if (isEmpty(testStack))
 	{
-		listElement->position = tempPosition;
-		listElement = listElement->next;
-		++tempPosition;
+		printf("Тест 3 не пройден\n");
+		isCorrect = false;
 	}
-}
 
-void showList(List* list)
-{
-	if (list->count == 0)
+	addElementInStack(testStack, testValue3);
+	duplicateHead(testStack);
+
+	if (deleteElementFromStack(testStack) != testValue3 || deleteElementFromStack(testStack) != testValue3 || deleteElementFromStack(testStack) != testValue1)
 	{
-		printf("Список пуст.\n");
-		return;
+		printf("Тест 4 не пройден\n");
+		isCorrect = false;
 	}
-	printf("Список: ");
-	ListElement* listElement = new ListElement;
-	listElement = list->head;
-	while (listElement != nullptr)
-	{
-		printf("%d ", listElement->value);
-		listElement = listElement->next;
-	}
-	printf("\n");
+
+	deleteStack(testStack);
+
+	return isCorrect;
 }
 
 int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	List* list = new List;
+	if (!test())
+	{
+		printf("Тесты не пройдены");
+		return 0;
+	}
+
+	MyStack* myStack = createStack();
 	int operation = -1;
 
 	while (operation)
 	{
 		printf("Введите номер операции:\n");
 		printf("0 - выйти\n");
-		printf("1 - добавить значение в список\n");
-		printf("2 - удалить значение из списка\n");
-		printf("3 - распечатать список\n");
+		printf("1 - добавить число на вершину стека\n");
+		printf("2 - удалить число с вершины стека\n");
+		printf("3 - дублировать число на вершине стека\n");
+		printf("4 - распечатать стек\n");
 		scanf("%d", &operation);
 
 		switch (operation)
 		{
-			case 0:
+		case 0:
+		{
+			break;
+		}
+		case 1:
+		{
+			printf("Какое число положить в стек?\n");
+			int value = 0;
+			scanf("%d", &value);
+			addElementInStack(myStack, value);
+			break;
+		}
+		case 2:
+		{
+			if (isEmpty(myStack))
 			{
-				break;
+				printf("Стек сейчас пуст, удаление элемента невозможно.\n");
 			}
-			case 1:
+			else
 			{
-				addElement(list);
-				break;
+				deleteElementFromStack(myStack);
 			}
-			case 2:
+			break;
+		}
+		case 3:
+		{
+			if (isEmpty(myStack))
 			{
-				deleteElement(list);
-				changePositions(list);
-				break;
+				printf("Стек сейчас пуст.\n");
 			}
-			case 3:
+			else
 			{
-				showList(list);
-				break;
+				duplicateHead(myStack);
 			}
-			default:
-			{
-				printf("Некорректная операция.\n");
-				break;
-			}
+			break;
+		}
+		case 4:
+		{
+			printStack(myStack);
+			break;
+		}
+		default:
+		{
+			printf("Некорректная операция.\n");
+			break;
+		}
 		}
 	}
+
+	deleteStack(myStack);
+
 	return 0;
 }
