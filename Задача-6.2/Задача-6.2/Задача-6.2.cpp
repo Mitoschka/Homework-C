@@ -1,92 +1,140 @@
 ﻿#include <stdio.h>
+#include <iostream>
 
-char* bracketsCheck(const char* string)
+#include "myStack.h"
+
+bool isBracketsCorrect(char brackets[])
 {
-	switch (*string)
+	MyStack* stack = createStack();
+	int i = 0;
+
+	while (brackets[i] != '\0')
 	{
-		case '\0':
-		case ')':
-		case '}':
-		case ']':
-		return (char*)string;
-		case '(':
+		switch (brackets[i])
 		{
-			char* ret = bracketsCheck(string + 1);
-			return (*ret == ')') ? bracketsCheck(ret + 1) : (char*)string;
-		}
+		case '(':
+		case '[':
 		case '{':
 		{
-			char* ret = bracketsCheck(string + 1);
-			return (*ret == '}') ? bracketsCheck(ret + 1) : (char*)string;
+			addElementInStack(stack, brackets[i]);
+			++i;
+			break;
 		}
-		case '[':
+
+		case ')':
+		case ']':
+		case '}':
 		{
-			char* ret = bracketsCheck(string + 1);
-			return (*ret == ']') ? bracketsCheck(ret + 1) : (char*)string;
+			if (isStackEmpty(stack))
+			{
+				deleteStack(stack);
+				return false;
+			}
+			char nextBracket = deleteElementFromStack(stack);
+			if (abs(brackets[i] - nextBracket) > 2)
+			{
+				deleteStack(stack);
+				return false;
+			}
+			++i;
+			break;
 		}
+
 		default:
-			return bracketsCheck(string + 1);
+		{
+			++i;
+			break;
+		}
+		}
 	}
+
+	if (isStackEmpty(stack))
+	{
+		deleteStack(stack);
+		return true;
+	}
+
+	deleteStack(stack);
+	return false;
 }
 
 bool test()
 {
-	const char test1[] = "((()";
-	if (!bracketsCheck(test1))
+	bool isCorrect = true;
+	MyStack* testStack = createStack();
+
+	if (!isStackEmpty(testStack))
 	{
-		return false;
+		isCorrect = false;
+		printf("Тест 1 не пройден.\n");
+	}
+	int testValue1 = 1;
+	int testValue2 = 2;
+	addElementInStack(testStack, testValue1);
+
+	if (isStackEmpty(testStack))
+	{
+		isCorrect = false;
+		printf("Тест 2 не пройден.\n");
 	}
 
-	const char test2[] = "(){}[]";
-	if (!bracketsCheck(test2))
+	addElementInStack(testStack, testValue2);
+
+	if (deleteElementFromStack(testStack) != testValue2)
 	{
-		return false;
+		isCorrect = false;
+		printf("Тест 3 не пройден.\n");
 	}
 
-	const char test3[] = "()))";
-	if (!bracketsCheck(test3))
+	deleteStack(testStack);
+
+	char testBrackets1[] = { '{', '(', ')', '}' };
+	if (!isBracketsCorrect(testBrackets1))
 	{
-		return false;
+		isCorrect = false;
+		printf("Тест 4 не пройден.\n");
 	}
 
-	const char test4[] = "({)}";
-	if (!bracketsCheck(test4))
+	char testBrackets2[] = { '{', '[', ']', ')' };
+	if (isBracketsCorrect(testBrackets2))
 	{
-		return false;
+		isCorrect = false;
+		printf("Тест 5 не пройден.\n");
 	}
 
-	const char test5[] = "[.](/)";
-	if (!bracketsCheck(test5))
+	char testBrackets3[] = { '(' };
+	if (isBracketsCorrect(testBrackets3))
 	{
-		return false;
+		isCorrect = false;
+		printf("Тест 6 не пройден.\n");
 	}
 
-	const char test6[] = "((()";
-	if (!bracketsCheck(test6))
-	{
-		return false;
-	}
-
-	const char test7[] = "(}";
-	if (!bracketsCheck(test7))
-	{
-		return false;
-	}
-
-	return true;
+	return isCorrect;
 }
 
 int main()
 {
+	setlocale(LC_ALL, "Russian");
+
 	if (!test())
 	{
-		printf("ERROR");
-		return 1;
+		printf("Некоторые тесты не пройдены.\n");
+		return 0;
 	}
-	char buf[BUFSIZ];
-	while (printf("String: ") && fgets(buf, BUFSIZ, stdin) && *buf != '\n')
+
+	char brackets[100];
+
+	printf("Введите последовательность скобок (последовательность кончается пробелом): ");
+	scanf("%s", brackets);
+
+	if (isBracketsCorrect(brackets))
 	{
-		printf("%s\n", (*bracketsCheck(buf)) ? "FAIL" : "OK");
+		printf("Баланс скобок соблюден.");
 	}
+	else
+	{
+		printf("Баланск скобок не соблюден.");
+	}
+
 	return 0;
 }
