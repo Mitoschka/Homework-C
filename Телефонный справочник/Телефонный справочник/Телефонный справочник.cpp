@@ -38,14 +38,12 @@ int addPerson(int personNum, Person* people)
 	return personNum + 1;
 }
 
-void saveNote(int peopleCounter, Person* people)
+bool saveNote(int peopleCounter, Person* people)
 {
 	FILE* phonebook = fopen("Phonebook.txt", "w");
 	if (phonebook == nullptr)
 	{
-		printf("Error\n");
-		fclose(phonebook);
-		printf("\n\nСохранение не прошло \n");
+		return false;
 	}
 	else
 	{
@@ -53,9 +51,9 @@ void saveNote(int peopleCounter, Person* people)
 		{
 			fprintf(phonebook, "%s\t%s\n", people[i].name, people[i].num);
 		}
+		fclose(phonebook);
+		return true;
 	}
-	fclose(phonebook);
-	printf("\n\nСохранение прошло успешно \n");
 }
 
 void print(FILE* phonebook)
@@ -65,6 +63,7 @@ void print(FILE* phonebook)
 	if ((fopen("Phonebook.txt", "r")) == nullptr)
 	{
 		printf("error\n");
+		return;
 	}
 	else
 	{
@@ -73,10 +72,10 @@ void print(FILE* phonebook)
 			printf("%s", string);
 			numOfLines++;
 		}
+		printf("Количество строк: %d\n", numOfLines);
+		fclose(phonebook);
+		printf("Все данные были распечатаны\n");
 	}
-	printf("Количество строк: %d\n", numOfLines);
-	fclose(phonebook);
-	printf("Все данные были распечатаны\n");
 }
 
 Person* numSearch(int personName, char* nameFinder, Person* people)
@@ -191,23 +190,42 @@ bool numSearchTest(int personName, char* nameFinder, Person* test)
 	return true;
 }
 
-int main()
+bool test()
 {
-	Person peopleTest[2] = {{"435345","qw"}, {"436564","sdfsd" }};
+	Person peopleTestFirst[2] = { {"435345","qw"}, {"436564","sdfsd" } };
 	char numTestFinder[] = "sdfsd";
-	if (!numSearchTest(2, numTestFinder, peopleTest))
+	if (!numSearchTest(2, numTestFinder, peopleTestFirst))
 	{
 		printf("Error");
-		return 1;
+		return false;
 	}
 
 	char nameTestFinder[] = "436564";
-	if (!nameSearchTest(2, nameTestFinder, peopleTest))
+	if (!nameSearchTest(2, nameTestFinder, peopleTestFirst))
 	{
 		printf("Error");
-		return 1;
+		return false;
 	}
 
+	Person peopleTestSecond[2] = { {"435345","qw"}, {"436564","sdfsd" } };
+	if (!saveNote(2, peopleTestSecond))
+	{
+		printf("Error");
+		return false;
+	}
+
+	Person peopleTestThird[2] = { {"435345","qw"}, {"436564","sdfsd" } };
+	saveNote(2, peopleTestThird);
+	if (!load(peopleTestThird))
+	{
+		printf("Error");
+		return false;
+	}
+}
+
+int main()
+{
+	test();
 	Person people[100];
 	FILE* phonebook = fopen("Phonebook.txt", "r+t");
 	setlocale(LC_ALL, "Rus");
@@ -251,14 +269,27 @@ int main()
 			}
 			case '5': 
 			{
-				saveNote(counter, people);
-				break;
+				
+				if (saveNote(counter, people) == true)
+				{
+					printf("\nСохранение прошло успешно \n");
+					break;
+				}
+				else
+				{
+					printf("Error\n");
+					printf("\nСохранение не прошло \n");
+					break;
+				}
 			}
 			case '6': 
 			{
-				printf("0 - выйти\n 1 - добавить запись (имя и телефон)\n \
-						2 - распечатать все имеющиеся записи\n 3 - найти имя по телефону \n \
-						4 - найти телефон по имени \n 5 - сохранить текущие данные в файл \n");
+				printf("0 - выйти\n");
+				printf("1 - добавить запись(имя и телефон)\n");
+				printf("2 - распечатать все имеющиеся записи\n");
+				printf("3 - найти имя по телефону \n");
+				printf("4 - найти телефон по имени \n");
+				printf("5 - сохранить текущие данные в файл \n");
 				break;
 			}
 			case '\n': 
