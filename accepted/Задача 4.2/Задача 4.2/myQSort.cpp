@@ -1,6 +1,7 @@
 #include "myQSort.h"
 
-void insertSortArray(int arrayOfNumbers[], int first, int last) // алгоритм сортировки вставками
+// алгоритм сортировки вставками
+void insertSortArray(int arrayOfNumbers[], int first, int last)
 {
 	for (int i = first + 1; i != last + 1; ++i)
 	{
@@ -16,9 +17,11 @@ void insertSortArray(int arrayOfNumbers[], int first, int last) // алгоритм сорт
 
 }
 
-int partition(int arrayOfNumbers[], int first, int last) // функци€ нахождени€ разделител€
+// функци€ нахождени€ разделител€
+int partition(int arrayOfNumbers[], int first, int last)
 {
-	int temporaryPivot = arrayOfNumbers[first]; // элемент, €вл€ющийс€ разделителем
+	// элемент, €вл€ющийс€ разделителем
+	int temporaryPivot = arrayOfNumbers[first];
 	int i = first;
 	int j = i;
 	for (i = first + 1; i != last + 1; ++i)
@@ -37,19 +40,23 @@ int partition(int arrayOfNumbers[], int first, int last) // функци€ нахождени€ р
 	return j;
 }
 
-void qSortArray(int arrayOfNumbers[], int first, int last) // алгоритм быстрой сортировки
+// алгоритм быстрой сортировки
+void qSortArray(int arrayOfNumbers[], int first, int last)
 {
 	if (first >= last)
 	{
 		return;
 	}
-	if (last - first < 10) //						если элементов в куске массива меньше 10, то
+	//если элементов в куске массива меньше 10, то
+	if (last - first < 10)
 	{
-		insertSortArray(arrayOfNumbers, first, last);       // вызываем процедуру алгоритма вставками
+		// вызываем процедуру алгоритма вставками
+		insertSortArray(arrayOfNumbers, first, last);
 	}
 	else
 	{
-		int pivot = partition(arrayOfNumbers, first, last); // разделитель
+		// разделитель
+		int pivot = partition(arrayOfNumbers, first, last);
 		qSortArray(arrayOfNumbers, first, pivot - 1);
 		qSortArray(arrayOfNumbers, pivot + 1, last);
 	}

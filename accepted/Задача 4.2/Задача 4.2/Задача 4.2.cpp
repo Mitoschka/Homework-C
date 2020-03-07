@@ -1,13 +1,15 @@
 ﻿#include <iostream>
 #include <time.h>
 #include <stdlib.h>
+#include <locale.h>
 
 #include "myQSort.h"
 
+// max длина массива
+const int maxSize = 100;
 
-const int maxSize = 100; // max длина массива
-
-void printArray(int arrayOfNumbers[], int size) // вывод элементов массива на экран
+// вывод элементов массива на экран
+void printArray(int arrayOfNumbers[], int size)
 {
 	for (int i = 0; i != size; i++)
 	{
@@ -15,7 +17,8 @@ void printArray(int arrayOfNumbers[], int size) // вывод элементов
 	}
 }
 
-int oftenElement(int arrayOfNumbers[], int size) // функция, возвращающая наиболее часто встречающийся элемент
+// функция, возвращающая наиболее часто встречающийся элемент
+int oftenElement(int arrayOfNumbers[], int size)
 {
 	int counter = 0;
 	int maxCounter = 0;
@@ -60,6 +63,7 @@ bool testOftenElement(int testArray[], int correctElement, int size)
 
 int main()
 {
+	setlocale(LC_ALL, "Rus");
 	int sortTestArray[] = { 0, 3, 4, 1, 2, 10, 9, 8, 11, 5, 12, 7, 6, 14, 13 };
 	int sortTestCorrectArray[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 	int testSize = 15;
@@ -77,7 +81,7 @@ int main()
 		printf("oftenElement test failed\n");
 	}
 
-	int arrayOfNumbers[maxSize];
+	int arrayOfNumbers[maxSize] = {};
 
 	FILE* file;
 	char nameFile[] = "numbers.txt";
@@ -88,11 +92,11 @@ int main()
 		return 0;
 	}
 	int size = 0;
-	fscanf_s(file, "%d", &size);
+	fscanf(file, "%d", &size);
 
 	for (int i = 0; i != size; ++i)
 	{
-		fscanf_s(file, "%d", &arrayOfNumbers[i]);
+		fscanf(file, "%d", &arrayOfNumbers[i]);
 	}
 
 	if (file)
@@ -103,8 +107,6 @@ int main()
 			printf("closing file error");
 		}
 	}
-
-	delete file;
 
 	printf("Array:\n");
 	printArray(arrayOfNumbers, size);
