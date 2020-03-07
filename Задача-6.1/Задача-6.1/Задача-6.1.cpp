@@ -1,193 +1,162 @@
-﻿#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
+﻿#include <iostream>
+#include <cstring>
 
-struct Node
+#include "myStack.h"
+
+const char plus = '+';
+const char minus = '-';
+const char multiplication = '*';
+const char division = '/';
+
+const int size = 100;
+
+bool IsExpressionCounted(char expression[], int numberOfChars, int& resultOfExpression)
 {
-	int data;
-	struct Node* next;
-};
+	MyStack* stack = createStack();
 
+	int numberCounter = 0;
+	int operationsCounter = 0;
 
-void printList(Node* head)
-{
-	Node* ptr = head;
-	printf("\n[ ");
-	while (ptr != nullptr)
+	bool isInputCorrect = true;
+
+	for (int i = 0; i != numberOfChars - 1; ++i)
 	{
-		printf("(%d) ", ptr->data);
-		ptr = ptr->next;
-	}
-	printf(" ]\n");
-}
+		if (expression[i] != ' ' && expression[i] != '=')
+		{
+			if (expression[i] >= '0' && expression[i] <= '9')
+			{
+				addElementInStack(stack, expression[i] - '0');
+				++numberCounter;
 
-int length(Node* head)
-{
-	int length = 0;
-	Node* current;
-	for (current = head; current != nullptr; current = current->next)
+			}
+			else
+			{
+				if (isStackEmpty(stack))
+				{
+					isInputCorrect = false;
+					break;
+				}
+				int secondNumber = deleteElementFromStack(stack);
+				if (isStackEmpty(stack))
+				{
+					isInputCorrect = false;
+					break;
+				}
+				int firstNumber = deleteElementFromStack(stack);
+
+				++operationsCounter;
+				int result = 0;
+
+				switch (expression[i])
+				{
+
+				case plus:
+				{
+					result = firstNumber + secondNumber;
+					addElementInStack(stack, result);
+
+					break;
+				}
+
+				case minus:
+				{
+					result = firstNumber - secondNumber;
+					addElementInStack(stack, result);
+
+					break;
+				}
+
+				case multiplication:
+				{
+					result = firstNumber * secondNumber;
+					addElementInStack(stack, result);
+
+					break;
+				}
+
+				case division:
+				{
+					result = firstNumber / secondNumber;
+					addElementInStack(stack, result);
+
+					break;
+				}
+
+				default:
+				{
+					isInputCorrect = false;
+					break;
+				}
+				}
+			}
+		}
+	}
+
+
+	if (operationsCounter + 1 == numberCounter && isInputCorrect && !isStackEmpty(stack))
 	{
-		length++;
+		resultOfExpression = deleteElementFromStack(stack);
 	}
-	return length;
-}
-
-void reverse(Node** headRef)
-{
-	if (length(*headRef) < 2)
+	else
 	{
-		return;
+		isInputCorrect = false;
 	}
-	Node* prev = nullptr;
-	Node* current = *headRef;
-	while (current != nullptr)
-	{
-		Node* next = current->next;
-		current->next = prev;
-		prev = current;
-		current = next;
-	}
-	*headRef = prev;
-}
 
-Node* insertFirst(int data, Node* head)
-{
-	Node* link = (struct Node*) malloc(sizeof(Node));
-	reverse(&head);
-	link->data = data;
-	link->next = head;
-	reverse(&link);
-	return link;
-}
+	deleteStack(stack);
 
-struct Node* deleteFirst(Node* head)
-{
-	Node* tempLink = head;
-	head = head->next;
-	free(tempLink);
-	return head;
-}
-
-bool isEmpty(Node* head)
-{
-	return head == nullptr;
-}
-
-bool isDelimetr(char symbol)
-{
-	return symbol == ' ';
-}
-
-bool isOperation(char symbol)
-{
-	return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/' || symbol == '%';
-}
-
-int priority(char operation)
-{
-	return
-		operation == '+' || operation == '-' ? 2 :
-		operation == '*' || operation == '/' || operation == '%' ? 1 :
-		3;
-}
-
-bool isNum(char symbol)
-{
-	return '0' <= symbol && symbol <= '9';
-}
-
-Node* processOperation(Node* list, char operation)
-{
-	int rightOperand = list->data;
-	list = deleteFirst(list);
-	int leftOperand = list->data;
-	list = deleteFirst(list);
-	printf("%d %c %d\n", leftOperand, operation, rightOperand);
-
-	switch (operation)
-	{
-	case '+':  list = insertFirst(leftOperand + rightOperand, list); break;
-	case '-':  list = insertFirst(leftOperand - rightOperand, list); break;
-	case '*':  list = insertFirst(leftOperand * rightOperand, list); break;
-	case '/':  list = insertFirst(leftOperand / rightOperand, list); break;
-	case '%':  list = insertFirst(leftOperand % rightOperand, list); break;
-	}
-	return list;
-}
-
-bool testDelim(char symbol, bool result)
-{
-	return isDelimetr(symbol) == result;
-}
-
-bool testIsOperation(char symbol, bool result)
-{
-	return isOperation(symbol) == result;
-}
-
-bool testIsNum(char symbol, bool result)
-{
-	return isNum(symbol) == result;
-}
-
-bool testPriority(char symbol, int result)
-{
-	return priority(symbol) == result;
+	return isInputCorrect;
 }
 
 int main()
 {
-	if (!testDelim(' ', true) && !testDelim('1', false))
+	setlocale(LC_ALL, "Russian");
+
+	char testExpression1[] = { '1','1','+','=' };
+	int testSize = 4;
+	int actualResult = 0;
+	int expectedResult = 2;
+	if (!IsExpressionCounted(testExpression1, testSize, actualResult) || actualResult != expectedResult)
 	{
-		printf("error1");
-		return 2;
+		printf("Тест 1 не пройден.");
+		return 0;
 	}
-	if (!testIsOperation('+', true) && !testIsOperation('1', false))
+
+	char testExpression2[] = { '1', '+', '1', '=' };
+
+	if (IsExpressionCounted(testExpression2, testSize, actualResult))
 	{
-		printf("error2");
-		return 2;
+		printf("Тест 2 не пройден.");
+		return 0;
 	}
-	if (!testIsNum('1', true) && !testIsNum('a', false))
+
+	char currentSymbol = ' ';
+
+	char expression[size];
+	int i = 0;
+	int numberOfChars = 0;
+
+	bool isInputCorrect = true;
+
+	printf("Введите выражение и знак равно ('='): ");
+	while (currentSymbol != '=')
 	{
-		printf("error3");
-		return 2;
+		scanf("%c", &currentSymbol);
+		expression[i] = currentSymbol;
+		++i;
+		++numberOfChars;
 	}
-	if (!testPriority('+', 2) && !testPriority('*', 1), !testPriority('^', 3))
+
+	int result = 0;
+
+	if (IsExpressionCounted(expression, numberOfChars, result))
 	{
-		printf("error");
-		return 2;
+		printf("Значение введенного выражения: %d", result);
 	}
-	printf("Enter expressions in postfix form: \n");
-	Node* headNumber = nullptr;
-	char* element = (char*)malloc(sizeof(char));
-	fgets(element, BUFSIZ, stdin);
-	for (int i = 0; i < strlen(element); i++)
+	else
 	{
-		if (!isDelimetr(element[i]))
-		{
-			if (isOperation(element[i]))
-			{
-				headNumber = processOperation(headNumber, element[i]);
-			}
-			else
-			{
-				int start = i;
-				while (i < strlen(element) && isNum(element[i]))
-				{
-					i++;
-				}
-				char* operand = (char*)malloc(sizeof(char) * (i - start));
-				memcpy(operand, &element[start], i - start);
-				reverse(&headNumber);
-				headNumber = insertFirst(atoi(operand), headNumber);
-				reverse(&headNumber);
-				free(operand);
-			}
-		}
+		printf("Некорректный ввод.");
 	}
-	free(element);
-	headNumber = deleteFirst(headNumber);
-	printf("\n%d\n", headNumber->data);
+
 	return 0;
+
 }
