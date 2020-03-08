@@ -134,6 +134,7 @@ void showList(List* list)
         listElement = listElement->next;
     }
     printf("\n");
+    delete listElement;
 }
 
 void deleteElement(List* list)
@@ -153,16 +154,14 @@ void deleteList(List* list)
     delete list;
 }
 
-int main()
+bool test()
 {
-    setlocale(LC_ALL, "Russian");
-
     List* testList = new List;
 
     if (!isListEmpty(testList))
     {
         printf("Ошибка в проверке на пустоту списка.");
-        return 0;
+        return false;
     }
 
     addElement(testList, 1);
@@ -170,13 +169,13 @@ int main()
     if (!isValueExistInList(testList, 1))
     {
         printf("Ошибка в добавлении элемента.");
-        return 0;
+        return false;
     }
 
     if (isValueExistInList(testList, 0))
     {
         printf("Ошибка в проверке на существование.");
-        return 0;
+        return false;
     }
 
     deleteElement(testList, 1);
@@ -184,7 +183,7 @@ int main()
     if (isValueExistInList(testList, 1))
     {
         printf("Ошибка в удалении элемента.");
-        return 0;
+        return false;
     }
 
     addElement(testList, 2);
@@ -200,11 +199,18 @@ int main()
         if (testArray[i] != testCorrectArray[i])
         {
             printf("Ошибка в сортированности листа.");
-            return 0;
+            return false;
         }
     }
 
     deleteList(testList);
+}
+
+
+int main()
+{
+    test();
+    setlocale(LC_ALL, "Russian");
 
     List* list = new List;
     int operation = -1;
