@@ -2,18 +2,6 @@
 #include "myExpression.h"
 #include "myTree.h"
 
-struct TreeElement
-{
-	char value;
-	TreeElement* left = nullptr;
-	TreeElement* right = nullptr;
-};
-
-struct MyTree
-{
-	TreeElement* head = nullptr;
-};
-
 void parseElement(char value, MyStack* stack)
 {
 	const char plus = '+';

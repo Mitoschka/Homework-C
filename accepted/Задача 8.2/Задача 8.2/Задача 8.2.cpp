@@ -5,6 +5,7 @@
 #include "myTree.h"
 #include "myExpression.h"
 
+using namespace std;
 
 const int maxSize = 100;
 
@@ -14,7 +15,9 @@ bool isTest1Correct()
 	char expression[maxSize] = { '*',' ', '(', '/', '(', '+', '9', '3', ')', ' ', '(', '+', '2', '2', ')', ')', '(', '-', '7', '4', ')' };
 	int correctAnswer = 9;
 	putExpressionToTree(tree, expression);
-	return correctAnswer == resultOfExpression(tree);
+	bool isCorrect = correctAnswer == resultOfExpression(tree);
+	deleteTree(tree);
+	return isCorrect;
 }
 
 bool isTest2Correct()
@@ -23,7 +26,9 @@ bool isTest2Correct()
 	char expression[maxSize] = { '4' };
 	int correctAnswer = 4;
 	putExpressionToTree(tree, expression);
-	return correctAnswer == resultOfExpression(tree);
+	bool isCorrect = correctAnswer == resultOfExpression(tree);
+	deleteTree(tree);
+	return isCorrect;
 }
 
 int main()
@@ -45,11 +50,11 @@ int main()
 	MyTree* tree = createTree();
 	char expression[maxSize];
 	FILE* file;
-	errno_t err;
-	err = fopen_s(&file, "expression.txt", "r");
+	errno_t err = fopen_s(&file, "expression.txt", "r");
 	if (err != 0)
 	{
 		printf("Ошибка открытия файла.");
+		deleteTree(tree);
 		return 0;
 	}
 	fgets(expression, sizeof(expression), file);
@@ -57,6 +62,7 @@ int main()
 	if (err != 0)
 	{
 		printf("Ошибка закрытия файла.");
+		deleteTree(tree);
 		return 0;
 	}
 

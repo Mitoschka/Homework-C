@@ -1,6 +1,16 @@
 #pragma once
 
-struct MyTree;
+struct TreeElement
+{
+	char value;
+	TreeElement* left = nullptr;
+	TreeElement* right = nullptr;
+};
+
+struct MyTree
+{
+	TreeElement* head = nullptr;
+};
 
 // Создание дерева
 MyTree* createTree();

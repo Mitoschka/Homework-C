@@ -1,18 +1,6 @@
 #include "myTree.h"
 #include <iostream>
 
-struct TreeElement
-{
-	char value;
-	TreeElement* left = nullptr;
-	TreeElement* right = nullptr;
-};
-
-struct MyTree
-{
-	TreeElement* head = nullptr;
-};
-
 MyTree* createTree()
 {
 	MyTree* newTree = new MyTree;

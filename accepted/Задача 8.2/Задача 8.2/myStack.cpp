@@ -17,6 +17,11 @@ MyStack* createStack()
 	return stack;
 }
 
+bool isStackEmpty(MyStack* stack)
+{
+	return stack->head == nullptr;
+}
+
 void addElementInStack(MyStack* stack, int value)
 {
 	StackElement* newElement = new StackElement;
