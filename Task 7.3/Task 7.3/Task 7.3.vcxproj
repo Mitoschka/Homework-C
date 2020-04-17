@@ -101,7 +101,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -147,10 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MyMergeSort.cpp" />
     <ClCompile Include="PhoneBook.cpp" />
     <ClCompile Include="Task 7.3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyMergeSort.h" />
     <ClInclude Include="PhoneBook.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,11 +2,51 @@
 #include <string.h>
 #include "PhoneBook.h"
 
+struct Record
+{
+	int number;
+	char name[maxSize]{};
+	Record* next = nullptr;
+};
+
+struct PhoneBook
+{
+	int numberOfRecords = 0;
+	Record* head = nullptr;
+};
+
 PhoneBook* createPhoneBook()
 {
 	return new PhoneBook;
 }
 
+Record* createRecord(int number, char newName[])
+{
+	Record* newRecord = new Record;
+	newRecord->number = number;
+	strcpy(newRecord->name, newName);
+	return newRecord;
+}
+
+int numberOfRecordsInBook(PhoneBook* phoneBook)
+{
+	return phoneBook->numberOfRecords;
+}
+
+Record* headOfPhoneBook(PhoneBook* phoneBook)
+{
+	return phoneBook->head;
+}
+
+int numberInRecord(Record* record)
+{
+	return record->number;
+}
+
+char* nameInRecord(Record* record)
+{
+	return record->name;
+}
 
 void deleteBook(PhoneBook* phoneBook)
 {
@@ -60,84 +100,6 @@ void addRecordInPhoneBook(PhoneBook* phoneBook, Record* recordInBook)
 	recordInBook->next = phoneBook->head;
 	phoneBook->head = recordInBook;
 	++phoneBook->numberOfRecords;
-}
-
-PhoneBook* reverseBook(PhoneBook* phoneBook)
-{
-	PhoneBook* tempBook = new PhoneBook;
-	while (phoneBook->head != nullptr)
-	{
-		addRecordInPhoneBook(tempBook, removeRecordFromBook(phoneBook));
-	}
-	deleteBook(phoneBook);
-	return tempBook;
-}
-
-bool compareRecords(PhoneBook* firstBook, PhoneBook* secondBook, bool& isNumberSort)
-{
-	if (isNumberSort)
-	{
-		return (firstBook->head->number > secondBook->head->number);
-	}
-
-	return (strcmp(firstBook->head->name, secondBook->head->name) > 0);
-}
-
-// Слияние двух списков в один.
-PhoneBook* merge(PhoneBook* phoneBook, PhoneBook* tempBook, bool& isNumberSort)
-{
-	PhoneBook* resultBook = new PhoneBook;
-	int sizeOfResultBook = phoneBook->numberOfRecords + tempBook->numberOfRecords;
-
-	phoneBook = reverseBook(phoneBook);
-	tempBook = reverseBook(tempBook);
-
-	for (int i = 0; i != sizeOfResultBook; ++i)
-	{
-		if (phoneBook->numberOfRecords && tempBook->numberOfRecords)
-		{
-			if (compareRecords(phoneBook, tempBook, isNumberSort))
-			{
-				addRecordInPhoneBook(resultBook, removeRecordFromBook(phoneBook));
-			}
-			else
-			{
-				addRecordInPhoneBook(resultBook, removeRecordFromBook(tempBook));
-			}
-		}
-		else if (phoneBook->numberOfRecords)
-		{
-			addRecordInPhoneBook(resultBook, removeRecordFromBook(phoneBook));
-		}
-		else
-		{
-			addRecordInPhoneBook(resultBook, removeRecordFromBook(tempBook));
-		}
-	}
-
-	deleteBook(phoneBook);
-	deleteBook(tempBook);
-
-	return resultBook;
-}
-
-// Сортировка слиянием.
-PhoneBook* mergeSort(PhoneBook* phoneBook, bool& isNumberSort)
-{
-	if (phoneBook->numberOfRecords != 1)
-	{
-		PhoneBook* tempBook = new PhoneBook;
-		int middle = phoneBook->numberOfRecords / 2;
-		while (phoneBook->numberOfRecords > middle)
-		{
-			addRecordInPhoneBook(tempBook, removeRecordFromBook(phoneBook));
-		}
-
-		phoneBook = merge(mergeSort(phoneBook, isNumberSort), mergeSort(tempBook, isNumberSort), isNumberSort);
-
-	}
-
-	return phoneBook;
 }
 
 void showBook(PhoneBook* phoneBook)

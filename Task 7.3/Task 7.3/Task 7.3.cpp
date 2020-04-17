@@ -1,38 +1,29 @@
 ﻿#include "PhoneBook.h"
+#include "MyMergeSort.h"
 #include <iostream>
 
 bool isCorrect()
 {
 	PhoneBook* phoneBook = createPhoneBook();
-	Record* record1 = new Record;
 	char name1[] = "aaa";
 	int number1 = 222;
-	strcpy(record1->name, name1);
-	record1->number = number1;
+	Record* record1 = createRecord(number1, name1);
 
-	Record* record2 = new Record;
 	char name2[] = "cccc";
 	int number2 = 3333;
-	strcpy(record2->name, name2);
-	record2->number = number2;
+	Record* record2 = createRecord(number2, name2);
 
-	Record* record3 = new Record;
 	char name3[] = "ddd";
 	int number3 = 555;
-	strcpy(record3->name, name3);
-	record3->number = number3;
+	Record* record3 = createRecord(number3, name3);
 
-	Record* record4 = new Record;
 	char name4[] = "bbb";
 	int number4 = 4444;
-	strcpy(record4->name, name4);
-	record4->number = number4;
+	Record* record4 = createRecord(number4, name4);
 
-	Record* record5 = new Record;
 	char name5[] = "eeee";
 	int number5 = 1;
-	strcpy(record5->name, name5);
-	record5->number = number5;
+	Record* record5 = createRecord(number5, name5);
 
 	addRecordInPhoneBook(phoneBook, record1);
 	addRecordInPhoneBook(phoneBook, record2);
