@@ -6,7 +6,7 @@
 
 const int size = 30;
 
-bool isExpressionCorrect(char infixExpression[], char postfixExpression[])
+bool isExpressionCounted(char infixExpression[], char postfixExpression[])
 {
 	const char plus = '+';
 	const char minus = '-';
@@ -14,8 +14,8 @@ bool isExpressionCorrect(char infixExpression[], char postfixExpression[])
 	const char division = '/';
 	char currentSymbol = ' ';
 
-	MyStack* resultStack = createStack();
-	MyStack* stackForOperations = createStack();
+	int k = 0;
+	MyStack * stackForOperations = createStack();
 
 	int numbersCounter = 0;
 	int operationCounter = 0;
@@ -26,12 +26,13 @@ bool isExpressionCorrect(char infixExpression[], char postfixExpression[])
 
 	while (currentSymbol != '=')
 	{
-		if (currentSymbol != '=' && currentSymbol != ' ')
+		if (currentSymbol != ' ')
 		{
 			if (currentSymbol >= '0' && currentSymbol <= '9')
 			{
 				++numbersCounter;
-				pushToStack(resultStack, currentSymbol);
+				postfixExpression[k] = currentSymbol;
+				++k;
 			}
 			else if (currentSymbol == plus || currentSymbol == minus)
 			{
@@ -41,10 +42,10 @@ bool isExpressionCorrect(char infixExpression[], char postfixExpression[])
 					if (isStackEmpty(stackForOperations))
 					{
 						deleteStack(stackForOperations);
-						deleteStack(resultStack);
 						return false;
 					}
-					pushToStack(resultStack, popFromStack(stackForOperations));
+					postfixExpression[k] = popFromStack(stackForOperations);
+					++k;
 				}
 
 				pushToStack(stackForOperations, currentSymbol);
@@ -64,18 +65,17 @@ bool isExpressionCorrect(char infixExpression[], char postfixExpression[])
 				--bracketsCounter;
 				while (headOfStack(stackForOperations) != '(')
 				{
-					pushToStack(resultStack, popFromStack(stackForOperations));
+					postfixExpression[k] = popFromStack(stackForOperations);
+					++k;
 					if (isStackEmpty(stackForOperations))
 					{
 						deleteStack(stackForOperations);
-						deleteStack(resultStack);
 						return false;
 					}
 				}
 				if (isStackEmpty(stackForOperations))
 				{
 					deleteStack(stackForOperations);
-					deleteStack(resultStack);
 					return false;
 				}
 				char anotherOpenBracket = popFromStack(stackForOperations);
@@ -83,7 +83,6 @@ bool isExpressionCorrect(char infixExpression[], char postfixExpression[])
 			else
 			{
 				deleteStack(stackForOperations);
-				deleteStack(resultStack);
 				return false;
 			}
 		}
@@ -95,27 +94,16 @@ bool isExpressionCorrect(char infixExpression[], char postfixExpression[])
 	if ((numbersCounter != operationCounter + 1) || bracketsCounter)
 	{
 		deleteStack(stackForOperations);
-		deleteStack(resultStack);
 		return false;
 	}
 
 	while (!isStackEmpty(stackForOperations))
 	{
-		pushToStack(resultStack, popFromStack(stackForOperations));
-	}
-
-	deleteStack(stackForOperations);
-
-	resultStack = reverseStack(resultStack);
-
-	int k = 0;
-	while (!isStackEmpty(resultStack))
-	{
-		postfixExpression[k] = popFromStack(resultStack);
+		postfixExpression[k] = popFromStack(stackForOperations);
 		++k;
 	}
 
-	deleteStack(resultStack);
+	deleteStack(stackForOperations);
 
 	return true;
 }
@@ -134,7 +122,7 @@ bool isCorrect()
 	char testExpression1[] = "1+(2+3)*4+5*6-9=";
 	char actualExpression1[size]{};
 	char expectedExpression1[] = "123+4*56*9-++";
-	if (!isExpressionCorrect(testExpression1, actualExpression1))
+	if (!isExpressionCounted(testExpression1, actualExpression1))
 	{
 		printf("Тест 1 не пройден.\n");
 		isCorrect = false;
@@ -148,7 +136,7 @@ bool isCorrect()
 
 	char testExpression2[] = "1 + (2*2)* =";
 
-	if (isExpressionCorrect(testExpression2, actualExpression1))
+	if (isExpressionCounted(testExpression2, actualExpression1))
 	{
 		printf("Тест 3 не пройден.\n");
 		isCorrect = false;
@@ -164,7 +152,7 @@ int main()
 	if (!isCorrect())
 	{
 		printf("Какие-то тесты не пройдены.");
-		return 0;
+		return 1;
 	}
 
 	char infixExpression[size]{};
@@ -173,7 +161,7 @@ int main()
 	printf("Введите выражение в инфиксной форме и завершающий знак 'равно' (=): ");
 	fgets(infixExpression, size, stdin);
 
-	if (isExpressionCorrect(infixExpression, postfixExpression))
+	if (isExpressionCounted(infixExpression, postfixExpression))
 	{
 		printf("Выражение в постфиксной форме: \n");
 		showExpression(postfixExpression);
@@ -182,6 +170,6 @@ int main()
 	{
 		printf("Некорректный ввод.");
 	}
-
+	
 	return 0;
 }

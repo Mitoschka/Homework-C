@@ -7,19 +7,19 @@ struct MyStack;
 MyStack* createStack();
 
 // Добавить элемент в стек.
-void pushToStack(MyStack* stack, char symbol);
+void pushToStack(MyStack *stack, char symbol);
 
 // Вернуть значение в голове стека без удаления.
-char headOfStack(MyStack* stack);
+char headOfStack(MyStack *stack);
 
 // Проверка на пустоту стека.
-bool isStackEmpty(MyStack* stack);
+bool isStackEmpty(MyStack *stack);
 
 // Извлечь и вернуть элемент из стека.
-char popFromStack(MyStack* stack);
+char popFromStack(MyStack *stack);
 
 // Удалить стек.
-void deleteStack(MyStack* stack);
+void deleteStack(MyStack *stack);
 
 // Развернуть стек.
-MyStack* reverseStack(MyStack* stack);
+MyStack * reverseStack(MyStack *stack);
