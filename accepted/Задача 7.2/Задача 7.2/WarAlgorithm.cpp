@@ -3,32 +3,27 @@
 
 int lastWarrior(int numberOfWarriors, int killedWarrior)
 {
-	List* list = new List;
+	List* list = createList();
 
 	initList(list, numberOfWarriors);
 
-	ListElement* listElement = list->head;
+	ListElement* listElement = beforeHeadElement(list);
 
-	while (listElement->next != nullptr)
-	{
-		listElement = listElement->next;
-	}
-	listElement->next = list->head;
-
-	while (listElement != listElement->next) //пока не наткнемся на элемент, который ссылается на себя, будем убивать
+	while (listElement != nextListElement(listElement)) //пока не наткнемся на элемент, который ссылается на себя, будем убивать
 	{
 		for (int i = 0; i != killedWarrior - 1; ++i)
 		{
-			listElement = listElement->next;
+			listElement = nextListElement(listElement);
 		}
-		ListElement* tempListElement = new ListElement;
-		tempListElement = listElement->next;
-		listElement->next = listElement->next->next;
+		ListElement* tempListElement = nextListElement(listElement);
+		changeNextToNextNext(listElement);
 		delete tempListElement;
 	}
 
-	int result = listElement->value;
+	int result = valueOfListElement(listElement);
 	delete listElement;
+
+	delete list;
 
 	return result;
 }

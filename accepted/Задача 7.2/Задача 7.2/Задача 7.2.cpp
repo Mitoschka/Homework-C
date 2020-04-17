@@ -44,7 +44,7 @@ int main()
 	if (!isCorrect())
 	{
 		printf("Тесты не пройдены.");
-		return 0;
+		return 1;
 	}
 
 	int numberOfWarriors = -1;
