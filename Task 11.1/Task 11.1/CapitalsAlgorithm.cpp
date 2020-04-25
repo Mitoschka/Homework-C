@@ -3,14 +3,14 @@
 
 #include <stdio.h>
 
-void ParseData(char path[], Graph** graph, List** citiesInfo, bool isCityInCountry[], int* numberOfCapitals, int* numberOfCities)
+void parseData(char path[], GraphEdges** graph, List** citiesInfo, bool isCityInCountry[], int* numberOfCapitals, int* numberOfCities)
 {
 	FILE* file = fopen(path, "r");
-	int actualnumberOfCities = 0;
+	int actualNumberOfCities = 0;
 	int numberOfRoads = 0;
-	fscanf(file, "%d%d", &actualnumberOfCities, &numberOfRoads);
-	initGraphs(graph, actualnumberOfCities);
-	*numberOfCities = actualnumberOfCities;
+	fscanf(file, "%d%d", &actualNumberOfCities, &numberOfRoads);
+	initGraphs(graph, actualNumberOfCities);
+	*numberOfCities = actualNumberOfCities;
 
 	for (int i = 0; i != numberOfRoads; ++i)
 	{
@@ -39,7 +39,7 @@ void ParseData(char path[], Graph** graph, List** citiesInfo, bool isCityInCount
 	*numberOfCapitals = actualNumberOfCapitals;
 }
 
-void RunAlgorithm(int numberOfCapitals, int maxWeight, List** citiesInfo, bool isCityInCountry[], Graph** graph)
+void runAlgorithm(int numberOfCapitals, int maxWeight, List** citiesInfo, bool isCityInCountry[], GraphEdges** graph)
 {
 	bool isCityAdded = true;
 	while (isCityAdded)
@@ -54,10 +54,10 @@ void RunAlgorithm(int numberOfCapitals, int maxWeight, List** citiesInfo, bool i
 			{
 				for (int k = 0; k != getSize(graph[valueFromElement(cursor)]); ++k)
 				{
-					if (!isCityInCountry[getNote(graph[valueFromElement(cursor)], k)] && getWeight(graph[valueFromElement(cursor)], k) < tempMinWeight)
+					if (!isCityInCountry[getNode(graph[valueFromElement(cursor)], k)] && getWeight(graph[valueFromElement(cursor)], k) < tempMinWeight)
 					{
 						tempMinWeight = getWeight(graph[valueFromElement(cursor)], k);
-						tempCity = getNote(graph[valueFromElement(cursor)], k);
+						tempCity = getNode(graph[valueFromElement(cursor)], k);
 					}
 				}
 				cursor = getNext(cursor);

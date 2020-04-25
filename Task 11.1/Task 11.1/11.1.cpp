@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 
 #include "MyList.h"
 #include "Graph.h"
@@ -13,8 +13,8 @@ const int maxNumberOfCapitals = 1000;
 bool isCorrect()
 {
 	bool isCorrect = true;
-	GraphEdges** graph = createGraph(maxNumberOfCities);
-	List** citiesInfo = createArrayOfList(maxNumberOfCapitals);
+	GraphEdges ** graph = createGraph(maxNumberOfCities);
+	List ** citiesInfo = createArrayOfList(maxNumberOfCapitals);
 	int numberOfCapitals = 0;
 	int numberOfCities = 0;
 	bool isCityInCountry[maxNumberOfCapitals]{ false };
@@ -63,15 +63,15 @@ int main()
 
 	if (!isCorrect())
 	{
-		printf("Тест(ы) не пройден(ы)");
+		printf("РўРµСЃС‚(С‹) РЅРµ РїСЂРѕР№РґРµРЅ(С‹)");
 		return 1;
 	}
 
 	int numberOfCities = 0;
 	int numberOfRoads = 0;
 
-	GraphEdges** graph = createGraph(maxNumberOfCities);
-	List** citiesInfo = createArrayOfList(maxNumberOfCapitals);
+	GraphEdges ** graph = createGraph(maxNumberOfCities);
+	List ** citiesInfo = createArrayOfList(maxNumberOfCapitals);
 	int numberOfCapitals = 0;
 	bool isCityInCountry[maxNumberOfCapitals]{ false };
 	char path[] = "cities.txt";
@@ -79,12 +79,12 @@ int main()
 	parseData(path, graph, citiesInfo, isCityInCountry, &numberOfCapitals, &numberOfCities);
 	runAlgorithm(numberOfCapitals, maxLength, citiesInfo, isCityInCountry, graph);
 
-	printf("Список государств со столицами: ");
+	printf("РЎРїРёСЃРѕРє РіРѕСЃСѓРґР°СЂСЃС‚РІ СЃРѕ СЃС‚РѕР»РёС†Р°РјРё: ");
 	for (int i = 0; i != numberOfCapitals; ++i)
 	{
 		citiesInfo[i] = reverseList(citiesInfo[i]);
-		printf("\nСтолица: %d", removeElementFromList(citiesInfo[i]));
-		printf("\nГорода в составе государства: ");
+		printf("\nРЎС‚РѕР»РёС†Р°: %d", removeElementFromList(citiesInfo[i]));
+		printf("\nР“РѕСЂРѕРґР° РІ СЃРѕСЃС‚Р°РІРµ РіРѕСЃСѓРґР°СЂСЃС‚РІР°: ");
 		int numberOfRestTowns = numberOfElementsInList(citiesInfo[i]);
 		for (int j = 0; j != numberOfRestTowns; ++j)
 		{

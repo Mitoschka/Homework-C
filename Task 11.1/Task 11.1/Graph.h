@@ -1,21 +1,21 @@
 #pragma once
 
-struct Graph;
+struct GraphEdges;
 
 //Создание графа.
-Graph** createGraph(int maxNumbersOfTown);
+GraphEdges** createGraph(int maxNumbersOfTown);
 
 //Инициализация графа.
-void initGraphs(Graph** graph, int actualnumberOfCities);
+void initGraphs(GraphEdges** graph, int actualNumberOfCities);
 
 //Добавление элемента с весом.
-void addToGraph(Graph* graph, int element, int weight);
+void addToGraph(GraphEdges* graph, int element, int weight);
 
-int getSize(Graph* graph);
+int getSize(GraphEdges* graph);
 
-int getNote(Graph* graph, int index);
+int getNode(GraphEdges* graph, int index);
 
-int getWeight(Graph* graph, int index);
+int getWeight(GraphEdges* graph, int index);
 
 // Удаление графа.
-void deleteGraph(Graph** graph, int size);
+void deleteGraph(GraphEdges** graph, int size);

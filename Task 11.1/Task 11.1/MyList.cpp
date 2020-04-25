@@ -93,7 +93,7 @@ void deleteList(List* list)
 {
 	if (list->head != nullptr)
 	{
-		int temp = removeElementFromList(list);
+		removeElementFromList(list);
 	}
 
 	delete list;

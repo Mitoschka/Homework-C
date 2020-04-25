@@ -1,8 +1,8 @@
 #include "Graph.h"
 
-struct Graph
+struct GraphEdges
 {
-	Graph()
+	GraphEdges()
 	{
 		nodes = new int[1];
 		sizeOfNodes = 0;
@@ -14,35 +14,35 @@ struct Graph
 	int* weights;
 };
 
-Graph** createGraph(int maxNumbersOfTown)
+GraphEdges** createGraph(int maxNumbersOfTown)
 {
-	return new Graph * [maxNumbersOfTown];
+	return new GraphEdges * [maxNumbersOfTown];
 }
 
-void initGraphs(Graph** graph, int actualnumberOfCities)
+void initGraphs(GraphEdges** graph, int actualnumberOfCities)
 {
 	for (int i = 0; i != actualnumberOfCities; ++i)
 	{
-		graph[i] = new Graph();
+		graph[i] = new GraphEdges();
 	}
 }
 
-int getSize(Graph* graph)
+int getSize(GraphEdges* graph)
 {
 	return graph->sizeOfNodes;
 }
 
-int getNote(Graph* graph, int index)
+int getNode(GraphEdges* graph, int index)
 {
 	return graph->nodes[index];
 }
 
-int getWeight(Graph* graph, int index)
+int getWeight(GraphEdges* graph, int index)
 {
 	return graph->weights[index];
 }
 
-void addToGraph(Graph* graph, int element, int weight)
+void addToGraph(GraphEdges* graph, int element, int weight)
 {
 	int* temporary = new int[graph->sizeOfNodes + 1];
 	int* tempWeights = new int[graph->sizeOfNodes + 1];
@@ -67,7 +67,7 @@ void addToGraph(Graph* graph, int element, int weight)
 	delete[] tempWeights;
 }
 
-void deleteGraph(Graph** graph, int size)
+void deleteGraph(GraphEdges** graph, int size)
 {
 	for (int i = 0; i != size; ++i)
 	{
