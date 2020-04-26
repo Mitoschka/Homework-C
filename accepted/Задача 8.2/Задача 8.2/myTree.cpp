@@ -1,10 +1,42 @@
 #include "myTree.h"
 #include <iostream>
 
+struct TreeElement
+{
+	char value;
+	TreeElement* left = nullptr;
+	TreeElement* right = nullptr;
+};
+
+struct MyTree
+{
+	TreeElement* head = nullptr;
+};
+
 MyTree* createTree()
 {
 	MyTree* newTree = new MyTree;
 	return newTree;
+}
+
+TreeElement* getHead(MyTree* tree)
+{
+	return tree->head;
+}
+
+char getValue(TreeElement* treeElement)
+{
+	return treeElement->value;
+}
+
+TreeElement* getLeft(TreeElement* treeElement)
+{
+	return treeElement->left;
+}
+
+TreeElement* getRight(TreeElement* treeElement)
+{
+	return treeElement->right;
 }
 
 bool isOperator(char value)
@@ -112,6 +144,43 @@ void putExpressionToTree(MyTree* tree, char expression[])
 	}
 }
 
+int count(TreeElement* treeElement)
+{
+	const char plus = '+';
+	const char minus = '-';
+	const char multiplication = '*';
+	const char division = '/';
+
+	if (treeElement->value == plus || treeElement->value == minus || treeElement->value == multiplication || treeElement->value == division)
+	{
+		if (treeElement->value == plus)
+		{
+			return count(treeElement->left) + count(treeElement->right);
+		}
+
+		if (treeElement->value == minus)
+		{
+			return count(treeElement->left) - count(treeElement->right);
+		}
+
+		if (treeElement->value == multiplication)
+		{
+			return count(treeElement->left) * count(treeElement->right);
+		}
+
+		if (treeElement->value == division)
+		{
+			return count(treeElement->left) / count(treeElement->right);
+		}
+	}
+	else
+	{
+		return treeElement->value - '0';
+	}
+
+	return 0;
+}
+
 void deleteTreeElement(TreeElement* treeElement)
 {
 	if (treeElement->left != nullptr)
@@ -130,4 +199,5 @@ void deleteTreeElement(TreeElement* treeElement)
 void deleteTree(MyTree* tree)
 {
 	deleteTreeElement(tree->head);
+	delete tree;
 }

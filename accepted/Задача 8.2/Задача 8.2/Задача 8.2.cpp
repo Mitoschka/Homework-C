@@ -12,7 +12,7 @@ const int maxSize = 100;
 bool isTest1Correct()
 {
 	MyTree* tree = createTree();
-	char expression[maxSize] = { '*',' ', '(', '/', '(', '+', '9', '3', ')', ' ', '(', '+', '2', '2', ')', ')', '(', '-', '7', '4', ')' };
+	char expression[maxSize] = "* ( / ( + 9 3 ) ( + 2 2))(-7 4)";
 	int correctAnswer = 9;
 	putExpressionToTree(tree, expression);
 	bool isCorrect = correctAnswer == resultOfExpression(tree);
@@ -48,23 +48,10 @@ int main()
 	}
 
 	MyTree* tree = createTree();
-	char expression[maxSize];
-	FILE* file;
-	errno_t err = fopen_s(&file, "expression.txt", "r");
-	if (err != 0)
-	{
-		printf("Ошибка открытия файла.");
-		deleteTree(tree);
-		return 0;
-	}
-	fgets(expression, sizeof(expression), file);
-	err = fclose(file);
-	if (err != 0)
-	{
-		printf("Ошибка закрытия файла.");
-		deleteTree(tree);
-		return 0;
-	}
+	char expression[maxSize]{};
+	FILE* file = fopen("expression.txt", "r");
+	fscanf(file, "%s", expression);
+	fclose(file);
 
 	putExpressionToTree(tree, expression);
 
