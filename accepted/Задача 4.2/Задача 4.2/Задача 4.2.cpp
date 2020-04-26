@@ -1,11 +1,10 @@
-﻿#include <iostream>
+﻿#include <locale.h>
 #include <string.h>
-#include <ctime>
-#include <cstdlib>
-#include <algorithm>
-#include <fstream>
+#include <time.h>
+#include <stdio.h>
 
 #include "myQSort.h"
+
 
 using namespace std;
 
