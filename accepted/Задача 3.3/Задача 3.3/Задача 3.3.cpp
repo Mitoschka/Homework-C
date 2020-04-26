@@ -1,8 +1,6 @@
-﻿#include <iostream>
-#include <ctime>
+﻿#include <ctime>
 #include <cstdlib>
-
-using namespace std;
+#include <stdio.h>
 
 // размер массива
 const int sizeArray = 7;
@@ -31,19 +29,18 @@ void printArray(int arrayOfNumbers[])
 // функция нахождения разделителя
 int partition(int arrayOfNumbers[], int first, int last)
 {
-	int temp = 0;
 	int marker = first;
 	for (int i = first; i <= last; i++)
 	{
 		if (arrayOfNumbers[i] < arrayOfNumbers[last])
 		{
-			temp = arrayOfNumbers[marker];
+			int temp = arrayOfNumbers[marker];
 			arrayOfNumbers[marker] = arrayOfNumbers[i];
 			arrayOfNumbers[i] = temp;
 			marker += 1;
 		}
 	}
-	temp = arrayOfNumbers[marker];
+	int temp = arrayOfNumbers[marker];
 	arrayOfNumbers[marker] = arrayOfNumbers[last];
 	arrayOfNumbers[last] = temp;
 	return marker;
@@ -57,8 +54,8 @@ void qSortArray(int arrayOfNumbers[], int first, int last)
 		return;
 	}
 	else
-	{
-		// разделитель
+
+	{// разделитель
 		int pivot = partition(arrayOfNumbers, first, last);
 		qSortArray(arrayOfNumbers, first, pivot - 1);
 		qSortArray(arrayOfNumbers, pivot + 1, last);
