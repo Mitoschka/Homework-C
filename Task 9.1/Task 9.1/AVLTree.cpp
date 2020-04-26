@@ -132,7 +132,7 @@ TreeElement* addElementToTree(Tree* tree, TreeElement* treeElement, int newKey, 
 	return balanceElement(treeElement);
 }
 
-// поиск узла с минимальным ключом в дереве p
+// поиск узла с минимальным ключом в дереве p 
 TreeElement* findMinimum(TreeElement* treeElement)
 {
 	return (treeElement->left != nullptr) ? findMinimum(treeElement->left) : treeElement;
@@ -260,7 +260,7 @@ void deleteTree(Tree* tree)
 	if (tree->head == nullptr)
 	{
 		delete tree;
-		return;
 	}
 	deleteTreeElement(tree->head);
+	delete tree;
 }

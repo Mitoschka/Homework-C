@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "avlTree.h"
+#include "AVLTree.h"
 
 const int maxSize = 20;
 
