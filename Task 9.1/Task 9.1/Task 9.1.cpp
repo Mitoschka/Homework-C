@@ -1,6 +1,9 @@
-#include <iostream>
+#include <locale.h>
+#include <string.h>
+#include <stdio.h>
 
 #include "AVLTree.h"
+
 
 const int maxSize = 20;
 
