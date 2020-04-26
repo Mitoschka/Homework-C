@@ -1,8 +1,10 @@
-#include <iostream>
+#include <locale.h>
+#include <stdio.h>
 
 #include "MyList.h"
 #include "Graph.h"
 #include "CapitalsAlgorithm.h"
+
 
 const int maxNumberOfCities = 1000;
 
