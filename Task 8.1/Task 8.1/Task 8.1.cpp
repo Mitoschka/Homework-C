@@ -1,6 +1,9 @@
-#include <iostream>
+#include <locale.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "BinaryTree.h"
+
 
 const int maxSize = 20;
 
