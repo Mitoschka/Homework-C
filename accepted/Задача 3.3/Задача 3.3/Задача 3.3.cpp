@@ -1,6 +1,6 @@
-﻿#include <ctime>
-#include <cstdlib>
-#include <stdio.h>
+﻿#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 // размер массива
 const int sizeArray = 7;
