@@ -2,10 +2,13 @@
 #include <ctime>
 #include <cstdlib>
 
+using namespace std;
+
 // размер массива
 const int sizeArray = 7;
 // диапазон случайных чисел
 const int randomNumberRange = 4;
+const int testSize = 15;
 
 // функция, которая принимает массив и заполняет его случайными значениями
 void generationArray(int arrayOfNumbers[])
@@ -63,14 +66,16 @@ void qSortArray(int arrayOfNumbers[], int first, int last)
 }
 
 // функция, возвращающая наиболее часто встречающийся элемент
-int mostCommonElement(int arrayOfNumbers[])
+int mostCommonElement(int arrayOfNumbers[], int actualSizeArray)
 {
+	printf("array sorted: \n");
+	printArray(arrayOfNumbers);
 	int counter = 0;
 	int maxCounter = 0;
 	int tempCommonElement = arrayOfNumbers[0];
-	for (int i = 0; i != sizeArray; ++i)
+	for (int i = 0; i != actualSizeArray; ++i)
 	{
-		if (arrayOfNumbers[i] == arrayOfNumbers[i + 1])
+		if (i != actualSizeArray - 1 && arrayOfNumbers[i] == arrayOfNumbers[i + 1])
 		{
 			++counter;
 		}
@@ -89,8 +94,8 @@ int mostCommonElement(int arrayOfNumbers[])
 
 bool testQSort(int testArray[], int correctArray[])
 {
-	qSortArray(testArray, 0, sizeArray - 1);
-	for (int i = 0; i != sizeArray; ++i)
+	qSortArray(testArray, 0, testSize - 1);
+	for (int i = 0; i != testSize; ++i)
 	{
 		if (testArray[i] != correctArray[i])
 		{
@@ -102,8 +107,8 @@ bool testQSort(int testArray[], int correctArray[])
 
 bool testCommonElement(int testArray[], int correctElement)
 {
-	qSortArray(testArray, 0, sizeArray - 1);
-	return mostCommonElement(testArray) == correctElement;
+	qSortArray(testArray, 0, testSize - 1);
+	return mostCommonElement(testArray, testSize) == correctElement;
 }
 
 int main()
@@ -121,7 +126,7 @@ int main()
 
 	if (!testCommonElement(oftenTestArray, correctOften))
 	{
-		printf("oftenElement test failed");
+		printf("oftenElement test failed\n");
 	}
 
 	int arrayOfNumbers[sizeArray]{};
@@ -134,7 +139,7 @@ int main()
 
 	qSortArray(arrayOfNumbers, 0, sizeArray - 1);
 
-	printf("The most common element: %d\n", mostCommonElement(arrayOfNumbers));
+	printf("The most common element: %d\n", mostCommonElement(arrayOfNumbers, sizeArray));
 
 	return 0;
 }
