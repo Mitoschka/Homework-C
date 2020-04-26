@@ -1,9 +1,9 @@
-﻿#include <iostream>
-#include <fstream>
-#include <string>
+﻿#include <locale.h>
+#include <stdio.h>
 
 #include "myTree.h"
 #include "myExpression.h"
+
 
 using namespace std;
 
