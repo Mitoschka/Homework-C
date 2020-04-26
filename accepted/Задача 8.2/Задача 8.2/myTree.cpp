@@ -7,7 +7,7 @@
 
 struct TreeElement
 {
-	char value;
+	char value = ' ';
 	TreeElement* left = nullptr;
 	TreeElement* right = nullptr;
 };
