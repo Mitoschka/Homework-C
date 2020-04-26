@@ -1,9 +1,13 @@
 ﻿#include <iostream>
-#include <time.h>
-#include <stdlib.h>
-#include <locale.h>
+#include <string.h>
+#include <ctime>
+#include <cstdlib>
+#include <algorithm>
+#include <fstream>
 
 #include "myQSort.h"
+
+using namespace std;
 
 // max длина массива
 const int maxSize = 100;
@@ -63,7 +67,6 @@ bool testOftenElement(int testArray[], int correctElement, int size)
 
 int main()
 {
-	setlocale(LC_ALL, "Rus");
 	int sortTestArray[] = { 0, 3, 4, 1, 2, 10, 9, 8, 11, 5, 12, 7, 6, 14, 13 };
 	int sortTestCorrectArray[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 	int testSize = 15;
@@ -81,16 +84,10 @@ int main()
 		printf("oftenElement test failed\n");
 	}
 
-	int arrayOfNumbers[maxSize] = {};
+	int arrayOfNumbers[maxSize];
 
-	FILE* file;
 	char nameFile[] = "numbers.txt";
-	errno_t err = fopen_s(&file, nameFile, "r");
-	if (err != 0)
-	{
-		printf("File doesnt exist\n");
-		return 0;
-	}
+	FILE* file = fopen(nameFile, "r");
 	int size = 0;
 	fscanf(file, "%d", &size);
 
@@ -99,14 +96,7 @@ int main()
 		fscanf(file, "%d", &arrayOfNumbers[i]);
 	}
 
-	if (file)
-	{
-		err = fclose(file);
-		if (err != 0)
-		{
-			printf("closing file error");
-		}
-	}
+	fclose(file);
 
 	printf("Array:\n");
 	printArray(arrayOfNumbers, size);
