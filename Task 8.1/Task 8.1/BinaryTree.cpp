@@ -135,39 +135,10 @@ TreeElement* deleteElementFromTree(TreeElement* treeElement, int keyToDelete)
 		}
 		else
 		{
-			treeElement = nullptr;
+			delete treeElement;
 		}
 	}
 	return treeElement;
-}
-
-bool isContain(Tree* tree, int keyToChecked)
-{
-	TreeElement* cursor = tree->head;
-	if (cursor != nullptr)
-	{
-		while (keyToChecked != cursor->key)
-		{
-			if (keyToChecked < cursor->key)
-			{
-				if (cursor->left == nullptr)
-				{
-					return false;
-				}
-				cursor = cursor->left;
-			}
-			else if (keyToChecked > cursor->key)
-			{
-				if (cursor->right == nullptr)
-				{
-					return false;
-				}
-				cursor = cursor->right;
-			}
-		}
-		return true;
-	}
-	return false;
 }
 
 char* getValue(Tree* tree, int keyToReturn)
@@ -197,7 +168,11 @@ char* getValue(Tree* tree, int keyToReturn)
 		return cursor->value;
 	}
 	return nullptr;
+}
 
+bool isContain(Tree* tree, int keyToChecked)
+{
+	return getValue(tree, keyToChecked) != nullptr;
 }
 
 void deleteTreeElement(TreeElement* treeElement)
@@ -223,4 +198,6 @@ void deleteTree(Tree* tree)
 		return;
 	}
 	deleteTreeElement(tree->head);
+
+	delete tree;
 }

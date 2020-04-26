@@ -121,7 +121,7 @@ int main()
 			printf("Введите ключ, по которому нужно удалить значение: ");
 			int key = 0;
 			scanf("%d", &key);
-			TreeElement* temp = deleteElementFromTree(getHead(tree), key);
+			deleteElementFromTree(getHead(tree), key);
 			break;
 		}
 		default:
