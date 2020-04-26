@@ -6,7 +6,7 @@ struct GraphEdges;
 GraphEdges** createGraph(int maxNumbersOfTown);
 
 //Инициализация графа.
-void initEdges(GraphEdges** graph, int camelCase);
+void initEdges(GraphEdges** graph, int actualNumberOfCities);
 
 //Добавление элемента с весом.
 void addToGraph(GraphEdges* edge, int element, int weight);

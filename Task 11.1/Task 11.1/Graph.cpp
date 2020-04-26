@@ -21,9 +21,9 @@ GraphEdges** createGraph(int maxNumbersOfTown)
 	return new GraphEdges * [maxNumbersOfTown];
 }
 
-void initEdges(GraphEdges** graph, int actualnumberOfCities)
+void initEdges(GraphEdges** graph, int actualNumberOfCities)
 {
-	for (int i = 0; i != actualnumberOfCities; ++i)
+	for (int i = 0; i != actualNumberOfCities; ++i)
 	{
 		graph[i] = new GraphEdges();
 	}
