@@ -6,16 +6,16 @@ struct GraphEdges;
 GraphEdges** createGraph(int maxNumbersOfTown);
 
 //Инициализация графа.
-void initGraphs(GraphEdges** graph, int actualNumberOfCities);
+void initEdges(GraphEdges** graph, int actualNumberOfCities);
 
 //Добавление элемента с весом.
-void addToGraph(GraphEdges* graph, int element, int weight);
+void addToGraph(GraphEdges* edge, int element, int weight);
 
-int getSize(GraphEdges* graph);
+int getSize(GraphEdges* edge);
 
-int getNode(GraphEdges* graph, int index);
+int getNode(GraphEdges* edge, int index);
 
-int getWeight(GraphEdges* graph, int index);
+int getWeight(GraphEdges* edge, int index);
 
 // Удаление графа.
 void deleteGraph(GraphEdges** graph, int size);

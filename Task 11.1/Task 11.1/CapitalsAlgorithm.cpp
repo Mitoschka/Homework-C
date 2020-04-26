@@ -9,7 +9,7 @@ void parseData(char path[], GraphEdges** graph, List** citiesInfo, bool isCityIn
 	int actualNumberOfCities = 0;
 	int numberOfRoads = 0;
 	fscanf(file, "%d%d", &actualNumberOfCities, &numberOfRoads);
-	initGraphs(graph, actualNumberOfCities);
+	initEdges(graph, actualNumberOfCities);
 	*numberOfCities = actualNumberOfCities;
 
 	for (int i = 0; i != numberOfRoads; ++i)

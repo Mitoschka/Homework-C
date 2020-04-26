@@ -1,12 +1,14 @@
 #include "Graph.h"
 
+const int maxSize = 1000;
+
 struct GraphEdges
 {
 	GraphEdges()
 	{
-		nodes = new int[1];
+		nodes = new int[maxSize];
 		sizeOfNodes = 0;
-		weights = new int[1];
+		weights = new int[maxSize];
 	}
 
 	int* nodes;
@@ -19,7 +21,7 @@ GraphEdges** createGraph(int maxNumbersOfTown)
 	return new GraphEdges * [maxNumbersOfTown];
 }
 
-void initGraphs(GraphEdges** graph, int actualnumberOfCities)
+void initEdges(GraphEdges** graph, int actualnumberOfCities)
 {
 	for (int i = 0; i != actualnumberOfCities; ++i)
 	{
@@ -27,44 +29,26 @@ void initGraphs(GraphEdges** graph, int actualnumberOfCities)
 	}
 }
 
-int getSize(GraphEdges* graph)
+int getSize(GraphEdges* edge)
 {
-	return graph->sizeOfNodes;
+	return edge->sizeOfNodes;
 }
 
-int getNode(GraphEdges* graph, int index)
+int getNode(GraphEdges* edge, int index)
 {
-	return graph->nodes[index];
+	return edge->nodes[index];
 }
 
-int getWeight(GraphEdges* graph, int index)
+int getWeight(GraphEdges* edge, int index)
 {
-	return graph->weights[index];
+	return edge->weights[index];
 }
 
-void addToGraph(GraphEdges* graph, int element, int weight)
+void addToGraph(GraphEdges* edge, int element, int weight)
 {
-	int* temporary = new int[graph->sizeOfNodes + 1];
-	int* tempWeights = new int[graph->sizeOfNodes + 1];
-	for (int i = 0; i != graph->sizeOfNodes; ++i)
-	{
-		temporary[i] = graph->nodes[i];
-		tempWeights[i] = graph->weights[i];
-	}
-	temporary[graph->sizeOfNodes] = element;
-	tempWeights[graph->sizeOfNodes] = weight;
-	delete[] graph->nodes;
-	delete[] graph->weights;
-	graph->nodes = new int[graph->sizeOfNodes + 1];
-	graph->weights = new int[graph->sizeOfNodes + 1];
-	for (int i = 0; i != graph->sizeOfNodes + 1; ++i)
-	{
-		graph->nodes[i] = temporary[i];
-		graph->weights[i] = tempWeights[i];
-	}
-	graph->sizeOfNodes = graph->sizeOfNodes + 1;
-	delete[] temporary;
-	delete[] tempWeights;
+	edge->nodes[edge->sizeOfNodes] = element;
+	edge->weights[edge->sizeOfNodes] = weight;
+	++edge->sizeOfNodes;
 }
 
 void deleteGraph(GraphEdges** graph, int size)

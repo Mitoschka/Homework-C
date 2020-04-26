@@ -19,7 +19,7 @@ List* createList()
 
 List** createArrayOfList(int size)
 {
-	return new List * [size];
+	return new List*[size];
 }
 
 int numberOfElementsInList(List* list)
