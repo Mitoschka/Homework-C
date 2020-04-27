@@ -14,7 +14,7 @@ TreeElement* getHead(Tree* tree);
 void addElementToTree(Tree* tree, int newKey, char newValue[]);
 
 // Удалить элемент из дерева.
-TreeElement* deleteElementFromTree(TreeElement* treeElement, int keyToDelete);
+TreeElement* deleteElementFromTree(Tree* tree, TreeElement* treeElement, int keyToDelete);
 
 // Проверить, находится ли элемент в дереве.
 bool isContain(Tree* tree, int keyToChecked);

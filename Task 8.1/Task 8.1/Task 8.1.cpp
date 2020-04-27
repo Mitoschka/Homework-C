@@ -40,7 +40,7 @@ bool isCorrect()
 		isCorrect = false;
 	}
 
-	deleteElementFromTree(getHead(testTree), 3);
+	deleteElementFromTree(testTree, getHead(testTree), 3);
 
 	if (isContain(testTree, 3))
 	{
@@ -124,7 +124,7 @@ int main()
 			printf("Введите ключ, по которому нужно удалить значение: ");
 			int key = 0;
 			scanf("%d", &key);
-			deleteElementFromTree(getHead(tree), key);
+			deleteElementFromTree(tree, getHead(tree), key);
 			break;
 		}
 		default:

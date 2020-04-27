@@ -102,7 +102,7 @@ TreeElement* next(TreeElement* treeElement)
 	return tempElement;
 }
 
-TreeElement* deleteElementFromTree(TreeElement* treeElement, int keyToDelete)
+TreeElement* deleteElementFromTree(Tree* tree, TreeElement* treeElement, int keyToDelete)
 {
 	if (treeElement == nullptr)
 	{
@@ -110,32 +110,50 @@ TreeElement* deleteElementFromTree(TreeElement* treeElement, int keyToDelete)
 	}
 	if (keyToDelete < treeElement->key)
 	{
-		treeElement->left = deleteElementFromTree(treeElement->left, keyToDelete);
+		treeElement->left = deleteElementFromTree(tree, treeElement->left, keyToDelete);
 	}
 	else if (keyToDelete > treeElement->key)
 	{
-		treeElement->right = deleteElementFromTree(treeElement->right, keyToDelete);
+		treeElement->right = deleteElementFromTree(tree, treeElement->right, keyToDelete);
 	}
 	else if (treeElement->left != nullptr && treeElement->right != nullptr)
 	{
 		TreeElement* tempElement = minimumElement(treeElement->right);
 		treeElement->key = tempElement->key;
 		strcpy(treeElement->value, tempElement->value);
-		treeElement->right = deleteElementFromTree(treeElement->right, treeElement->key);
+		treeElement->right = deleteElementFromTree(tree, treeElement->right, treeElement->key);
 	}
 	else
 	{
 		if (treeElement->left != nullptr)
 		{
+			TreeElement* tempElement = treeElement;
 			treeElement = treeElement->left;
+			if (tree->head->value == tempElement->value)
+			{
+				tree->head = treeElement;
+			}
+			delete tempElement;
 		}
 		else if (treeElement->right != nullptr)
 		{
+			TreeElement* tempElement = treeElement;
 			treeElement = treeElement->right;
+			if (tree->head->value == tempElement->value)
+			{
+				tree->head = treeElement;
+			}
+			delete tempElement;
 		}
 		else
 		{
-			delete treeElement;
+			TreeElement* tempElement = treeElement;
+			treeElement = nullptr;
+			if (tree->head->value == tempElement->value)
+			{
+				tree->head = treeElement;
+			}
+			delete tempElement;
 		}
 	}
 	return treeElement;
