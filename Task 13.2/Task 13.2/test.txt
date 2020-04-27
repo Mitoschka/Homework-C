@@ -1,0 +1,14 @@
+4 3
+0 1 0
+0 1 2
+2 2 3
+2 0 3
+if (isRecor/*dsRead(phoneBook))
+{
+print*/f("Каким образом отсортировать книгу? (0 - по именам, 1 - по номерам)\n");
+int option = 0;
+**/scanf("%d", &option);
+bool isSortByN/*umber = op/tio**/*n;
+phoneBook = mergeSort(phoneBook, isSortByNumber);
+showBook(phoneBook);/*
+}*/

@@ -1,0 +1,11 @@
+4 3
+0 1 0
+0 1 2
+2 2 3
+2 0 3
+void helloworld(int /*helloworldfunc*/ a);
+char * comments = analizeFile(file); /*array of chars*/ comments
+printf("Комментарии в файле: \n %s", comments);
+fclose(file);
+/*========== Сборка: успешно: 1, с ошибками: 0, без изменений: 0, пропущено: 0 ==========
+ с ошибками: 0, без изменений: 0, пропущено: 0 ==========*/
