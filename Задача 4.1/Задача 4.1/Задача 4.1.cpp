@@ -1,17 +1,14 @@
-﻿#include <iostream>
+﻿#include <stdio.h>
+#include <locale.h>
 
-const int numberOfDigits = 10; // максимальный размер массива для хранения двоичного представления числа
+// максимальный размер массива для хранения двоичного представления числа
+const int numberOfDigits = sizeof(int) * 8;
 
-struct BinaryNumber // класс двоичных чисел
+// структура двоичных чисел
+struct BinaryNumber 
 {
-	BinaryNumber()
-	{
-		for (int i = 0; i != numberOfDigits; ++i)
-		{
-			arrayNumber[i] = false;
-		}
-	}
-	bool arrayNumber[numberOfDigits]; // представление двоичного числа в виде массива
+	// представление двоичного числа в виде массива
+	bool arrayNumber[numberOfDigits]{};
 };
 
 int powerOfTwo(int degree)
@@ -32,7 +29,8 @@ void reverseDigits(BinaryNumber* binNumber)
 	}
 }
 
-void printBinaryNumber(BinaryNumber* binNumber) // вывод двоичного числа на экран
+// вывод двоичного числа на экран
+void printBinaryNumber(BinaryNumber* binNumber)
 {
 	for (int i = numberOfDigits - 1; i != -1; --i)
 	{
@@ -47,108 +45,56 @@ void plusBinaryOne(BinaryNumber* number)
 	bool tempDigit = false;
 	for (int i = 0; i != numberOfDigits - 1; ++i)
 	{
-		int tempResultDigit = number->arrayNumber[i] + binOne->arrayNumber[i] + tempDigit; // складываем побитово оба числа и учитываем перенос
+		// складываем побитово оба числа и учитываем перенос
+		int tempResultDigit = number->arrayNumber[i] + binOne->arrayNumber[i] + tempDigit;
 		number->arrayNumber[i] = tempResultDigit % 2;
 		tempDigit = tempResultDigit / 2;
 	}
 }
 
-void sumOfTwoBinaryNumbers(BinaryNumber* firstNumber, BinaryNumber* secondNumber) // сложение двух двоичных чисел, результат записывается в 
-{																			// первое(!!!) число
-	bool tempDigit = false; // переменная, отвечающая за битовый перенос
+// сложение двух двоичных чисел, результат записывается в 
+void sumOfTwoBinaryNumbers(BinaryNumber* firstNumber, BinaryNumber* secondNumber)
+{
+	// первое число
+	int tempDigit = 0;
+	for (int i = numberOfDigits - 1; i >= 0; --i)
+	{
+		int temp = firstNumber->arrayNumber[i] + secondNumber->arrayNumber[i] + tempDigit;
+		firstNumber->arrayNumber[i] = temp % 2;
+		tempDigit = temp / 2;
+	}
+}
+
+// перевод десятичного числа в двоичное
+void decToBin(int decNumber, BinaryNumber* binNumber)
+{
+	int helpBit = 0x80000000;
 	for (int i = 0; i != numberOfDigits; ++i)
 	{
-		int tempResultDigit = firstNumber->arrayNumber[i] + secondNumber->arrayNumber[i] + tempDigit; // складываем побитово оба числа и учитываем перенос
-		firstNumber->arrayNumber[i] = tempResultDigit % 2;
-		tempDigit = tempResultDigit / 2;
+		binNumber->arrayNumber[i] = (decNumber & helpBit);
+		helpBit = helpBit >> 1;
+		helpBit = helpBit & 0x7FFFFFFF;
 	}
 }
 
-void decToBin(int decNumber, BinaryNumber* binNumber) // перевод десятичного числа в двоичное
-{
-	bool isPositive = (decNumber >= 0);
-	if (!isPositive)
-	{
-		decNumber = decNumber * (-1);
-	}
-
-	int i = 0;
-
-	while (decNumber != 0) // пока число не равно нулю
-	{
-		binNumber->arrayNumber[i] = decNumber % 2; // записываем остаток деления на два
-		++i;                                 // переходим на следующий разряд
-		decNumber /= 2;
-	}
-
-	if (!isPositive)
-	{
-		reverseDigits(binNumber);
-		binNumber->arrayNumber[numberOfDigits - 1] = true; //обозначили, что это отрицательное число
-		plusBinaryOne(binNumber);
-	}
-}
-
-int binToDec(BinaryNumber* number) // перевод двоичного числа в десятичное
+// перевод двоичного числа в десятичное
+int binToDec(BinaryNumber* number)
 {
 	int resultInDec = 0;
-	bool isPositive = !number->arrayNumber[numberOfDigits - 1];
-	if (!isPositive)
+	for (int i = numberOfDigits - 1; i >= 0; --i)
 	{
-		reverseDigits(number);
-		plusBinaryOne(number);
+		if (number->arrayNumber[i])
+		{
+			resultInDec += powerOfTwo(numberOfDigits - i - 1);
+		}
 	}
-	for (int i = 0; i != numberOfDigits - 1; ++i)
-	{
-		resultInDec += number->arrayNumber[i] * powerOfTwo(i);
-	}
-	if (!isPositive)
-	{
-		resultInDec *= -1;
-	}
+
 	return resultInDec;
 }
 
 bool test()
 {
 	bool isPassed = true;
-	int testDecNumber = -117;
-	bool correctBinary[] = { true, true, false, true, false, false, false, true, true, true };
-	BinaryNumber* testBinaryNumber = new BinaryNumber;
-	decToBin(testDecNumber, testBinaryNumber);
-	for (int i = 0; i != numberOfDigits; ++i)
-	{
-		if (correctBinary[i] != testBinaryNumber->arrayNumber[i])
-		{
-			isPassed = false;
-			printf("decToBin test failed\n");
-			break;
-		}
-	}
-
-	bool testBinary[] = { false, false, true, true, true, false, true, false, false, false };
-	int correctDecNumber = 92;
-	for (int i = 0; i != numberOfDigits; ++i)
-	{
-		testBinaryNumber->arrayNumber[i] = testBinary[i];
-	}
-	if (correctDecNumber != binToDec(testBinaryNumber))
-	{
-		isPassed = false;
-		printf("binToDec test failed\n");
-	}
-
-	bool testCorrectPlusOne[] = { true, false, true, true, true, false, true, false, false, false };
-	plusBinaryOne(testBinaryNumber);
-	for (int i = 0; i != numberOfDigits; ++i)
-	{
-		if (testCorrectPlusOne[i] != testBinaryNumber->arrayNumber[i])
-		{
-			isPassed = false;
-			printf("plusBinaryOne test failed\n");
-			break;
-		}
-	}
 
 	int testDec1 = -43;
 	int testDec2 = 78;
@@ -157,16 +103,28 @@ bool test()
 	decToBin(testDec1, testBin1);
 	decToBin(testDec2, testBin2);
 	sumOfTwoBinaryNumbers(testBin1, testBin2);
-	bool correctSum[] = { true, true, false, false, false, true, false, false, false, false };
-	for (int i = 0; i != numberOfDigits; ++i)
+	if (binToDec(testBin1) != 35)
 	{
-		if (correctSum[i] != testBin1->arrayNumber[i])
-		{
-			isPassed = false;
-			printf("sumOfTwo test failed\n");
-			break;
-		}
+		isPassed = false;
 	}
+
+	delete testBin1;
+	delete testBin2;
+
+	int testDec3 = 272;
+	int testDec4 = -599;
+	BinaryNumber* testBin3 = new BinaryNumber;
+	BinaryNumber* testBin4 = new BinaryNumber;
+	decToBin(testDec3, testBin3);
+	decToBin(testDec4, testBin4);
+	sumOfTwoBinaryNumbers(testBin3, testBin4);
+	if (binToDec(testBin3) != -327)
+	{
+		isPassed = false;
+	}
+
+	delete testBin3;
+	delete testBin4;
 
 	return isPassed;
 }
@@ -178,7 +136,7 @@ int main()
 	if (!test())
 	{
 		printf("Некоторые тесты не пройдены.");
-		return 0;
+		return 1;
 	}
 
 	int maximum = (powerOfTwo(numberOfDigits - 1) - 1) / 2 - 1;
@@ -193,7 +151,7 @@ int main()
 	while (firstDecNumber < minimum || firstDecNumber > maximum || secondDecNumber < minimum || secondDecNumber > maximum)
 	{
 		printf("Числа должны быть в промежутке от %d до %d. Попробуйте еще раз: ", minimum, maximum);
-		scanf("%d, %d", &firstDecNumber, &secondDecNumber);
+		scanf("%d\n%d", &firstDecNumber, &secondDecNumber);
 	}
 
 	BinaryNumber* firstBinaryNumber = new BinaryNumber;
