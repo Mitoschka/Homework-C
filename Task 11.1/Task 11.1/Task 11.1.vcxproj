@@ -150,7 +150,6 @@
     <ClCompile Include="CapitalsAlgorithm.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="MyList.cpp" />
-    <ClCompile Include="Task 11.1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CapitalsAlgorithm.h" />

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Task 11.1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CapitalsAlgorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
