@@ -37,7 +37,14 @@ void newHead(Tree* tree, TreeElement* newHead)
 
 int getHeight(TreeElement* treeElement)
 {
-	return (treeElement == nullptr) ? treeElement->height : 0;
+	if (treeElement == nullptr)
+	{
+		return 0;
+	}
+	else
+	{
+		return treeElement->height;
+	}
 }
 
 int balanceFactor(TreeElement* treeElement)
@@ -183,31 +190,7 @@ TreeElement* removeElementFromTree(TreeElement* treeElement, int keyToDelete)
 
 bool isContain(Tree* tree, int keyToChecked)
 {
-	TreeElement* cursor = tree->head;
-	if (cursor != nullptr)
-	{
-		while (keyToChecked != cursor->key)
-		{
-			if (keyToChecked < cursor->key)
-			{
-				if (cursor->left == nullptr)
-				{
-					return false;
-				}
-				cursor = cursor->left;
-			}
-			else if (keyToChecked > cursor->key)
-			{
-				if (cursor->right == nullptr)
-				{
-					return false;
-				}
-				cursor = cursor->right;
-			}
-		}
-		return true;
-	}
-	return false;
+	return getValue(tree, keyToChecked) != nullptr;
 }
 
 char* getValue(Tree* tree, int keyToReturn)
@@ -260,6 +243,7 @@ void deleteTree(Tree* tree)
 	if (tree->head == nullptr)
 	{
 		delete tree;
+		return;
 	}
 	deleteTreeElement(tree->head);
 	delete tree;
