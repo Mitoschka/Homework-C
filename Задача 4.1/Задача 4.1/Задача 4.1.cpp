@@ -175,5 +175,8 @@ int main()
 
 	printf("Сумма чисел в десятичном представлении: %d", binToDec(firstBinaryNumber));
 
+	delete firstBinaryNumber;
+	delete secondBinaryNumber;
+
 	return 0;
 }
