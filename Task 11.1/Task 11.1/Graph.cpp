@@ -18,7 +18,7 @@ struct GraphEdges
 
 GraphEdges** createGraph(int maxNumbersOfTown)
 {
-	return new GraphEdges * [maxNumbersOfTown];
+	return new GraphEdges*[maxNumbersOfTown];
 }
 
 void initEdges(GraphEdges** graph, int actualNumberOfCities)

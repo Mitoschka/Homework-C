@@ -85,13 +85,13 @@ List* reverseList(List* list)
 	{
 		addElementInList(tempList, removeElementFromList(list));
 	}
-	delete list;
+	deleteList(list);
 	return tempList;
 }
 
 void deleteList(List* list)
 {
-	if (list->head != nullptr)
+	while (list->head != nullptr)
 	{
 		removeElementFromList(list);
 	}
