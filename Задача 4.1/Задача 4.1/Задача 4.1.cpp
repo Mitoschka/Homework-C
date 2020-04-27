@@ -1,5 +1,6 @@
 ﻿#include <stdio.h>
 #include <locale.h>
+#include <limits.h>
 
 // максимальный размер массива для хранения двоичного представления числа
 const int numberOfDigits = sizeof(int) * 8;
@@ -35,20 +36,6 @@ void printBinaryNumber(BinaryNumber* binNumber)
 	for (int i = numberOfDigits - 1; i != -1; --i)
 	{
 		printf("%d", binNumber->arrayNumber[i]);
-	}
-}
-
-void plusBinaryOne(BinaryNumber* number)
-{
-	BinaryNumber* binOne = new BinaryNumber;
-	binOne->arrayNumber[0] = true;
-	bool tempDigit = false;
-	for (int i = 0; i != numberOfDigits - 1; ++i)
-	{
-		// складываем побитово оба числа и учитываем перенос
-		int tempResultDigit = number->arrayNumber[i] + binOne->arrayNumber[i] + tempDigit;
-		number->arrayNumber[i] = tempResultDigit % 2;
-		tempDigit = tempResultDigit / 2;
 	}
 }
 
@@ -139,8 +126,8 @@ int main()
 		return 1;
 	}
 
-	int maximum = (powerOfTwo(numberOfDigits - 1) - 1) / 2 - 1;
-	int minimum = -powerOfTwo(numberOfDigits - 1) / 2 + 1;
+	int maximum = INT_MAX;
+	int minimum = INT_MIN;
 
 	int firstDecNumber = 0;
 	int secondDecNumber = 0;
