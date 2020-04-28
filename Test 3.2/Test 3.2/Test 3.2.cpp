@@ -1,39 +1,99 @@
 #include "Sort.h"
 #include <string.h>
 
-void insertionSort(int countLeft, int countRight, int array[], int helpArray[])
+void insertionSort(int countLeft, int countRight, int intArray[], char stringArray[][30], int helpArray[], bool isIntSort)
 {
 	for (int i = countLeft; i <= countRight; i++)
 	{
-		const int value = array[i];
+		const int intValue = intArray[i];
+		auto stringValue = stringArray[i];
 		const int helpValue = helpArray[i];
 		int j = i;
-		for (; j > countLeft && array[j - 1] > value; j--)
+		bool isValueGreater = true;
+		if (isIntSort)
 		{
-			array[j] = array[j - 1];
-			helpArray[j] = helpArray[j - 1];
+			isValueGreater = intArray[j - 1] > intValue;
 		}
-		array[j] = value;
-		helpArray[j] = helpValue;
+		else
+		{
+			strcmp(stringArray[j - 1], stringValue) > 0;
+		}
+		for (; j > countLeft && isValueGreater; j--)
+		{
+			if (isIntSort)
+			{
+				intArray[j] = intArray[j - 1];
+			}
+			else
+			{
+				
+				*stringArray[j] = *stringArray[j - 1];
+			}
+			helpArray[j] = helpArray[j - 1];
+			if (isIntSort)
+			{
+				isValueGreater = intArray[j - 1] > intValue;
+			}
+			else
+			{
+				strcmp(stringArray[j - 1], stringValue) > 0;
+			}
+		}
+		if (isIntSort)
+		{
+			helpArray[j] = helpValue;
+		}
+		else
+		{
+			*stringArray[j] = *stringValue;
+		}
 	}
 }
 
-void qsortForInt(int countLeft, int countRight, int array[], int helpArray[])
+void qsort(int countLeft, int countRight, int intArray[], char stringArray[][30], int helpArray[], bool isIntSort)
 {
-	auto value = array[(countLeft + countRight) / 2];
+	auto intValue = intArray[(countLeft + countRight) / 2];
+	auto stringValue = stringArray[(countLeft + countRight) / 2];
+	bool isGreater = true;
 	for (int i = countLeft, j = countRight; i != j;)
 	{
-		if (array[i] > array[j])
+		if (isIntSort)
 		{
-			int const currentValue = array[i];
-			array[i] = array[j];
-			array[j] = currentValue;
+			isGreater = intArray[i] > intArray[j];
+		}
+		else
+		{
+			isGreater = strcmp(stringArray[i], stringArray[j]) > 0;
+		}
+		if (isGreater)
+		{
+			if (isIntSort)
+			{
+				int const currentValue = intArray[i];
+				intArray[i] = intArray[j];
+				intArray[j] = currentValue;
+			}
+			else
+			{
+				auto currentValue = *stringArray[i];
+				*stringArray[i] = *stringArray[j];
+				*stringArray[j] = currentValue;
+			}
 
 			int const helpCurrentValue = helpArray[i];
 			helpArray[i] = helpArray[j];
 			helpArray[j] = helpCurrentValue;
 		}
-		if (array[i] < value)
+		bool isSmaller = true;
+		if (isIntSort)
+		{
+			isSmaller = intArray[i] < intValue;
+		}
+		else
+		{
+			isSmaller = stringArray[i] < stringValue;
+		}
+		if (isSmaller)
 		{
 			i++;
 		}
@@ -45,81 +105,19 @@ void qsortForInt(int countLeft, int countRight, int array[], int helpArray[])
 		{
 			if (countLeft - i + 1 < 10)
 			{
-				insertionSort(countLeft, i, array, helpArray);
+				insertionSort(countLeft, i, intArray, stringArray, helpArray, isIntSort);
 			}
 			else
 			{
-				qsortForInt(countLeft, i, array, helpArray);
+				qsort(countLeft, i, intArray, stringArray, helpArray, isIntSort);
 			}
 			if (j - countRight + 1 < 10)
 			{
-				insertionSort(j, countRight, array, helpArray);
+				insertionSort(j, countRight, intArray, stringArray, helpArray, isIntSort);
 			}
 			else
 			{
-				qsortForInt(j, countRight, array, helpArray);
-			}
-		}
-	}
-}
-
-void insertionSortForString(int countLeft, int countRight, char array[][30], int helpArray[])
-{
-	for (int i = countLeft; i <= countRight; i++)
-	{
-		auto value = array[i];
-		const int helpValue = helpArray[i];
-		int j = i;
-		for (; j > countLeft && strcmp(array[j - 1], value) > 0; j--)
-		{
-			*array[j] = *array[j - 1];
-			helpArray[j] = helpArray[j - 1];
-		}
-		*array[j] = *value;
-		helpArray[j] = helpValue;
-	}
-}
-
-void qsortForStrings(int countLeft, int countRight, char array[][30], int helpArray[])
-{
-	auto value = array[(countLeft + countRight) / 2];
-	for (int i = countLeft, j = countRight; i != j;)
-	{
-		if (strcmp(array[i], array[j]) > 0)
-		{
-			auto currentValue = *array[i];
-			*array[i] = *array[j];
-			*array[j] = currentValue;
-
-			int const helpCurrentValue = helpArray[i];
-			helpArray[i] = helpArray[j];
-			helpArray[j] = helpCurrentValue;
-		}
-		if (array[i] < value)
-		{
-			i++;
-		}
-		else
-		{
-			j--;
-		}
-		if (i == j)
-		{
-			if (countLeft - i + 1 < 10)
-			{
-				insertionSortForString(countLeft, i, array, helpArray);
-			}
-			else
-			{
-				qsortForStrings(countLeft, i, array, helpArray);
-			}
-			if (j - countRight + 1 < 10)
-			{
-				insertionSortForString(j, countRight, array, helpArray);
-			}
-			else
-			{
-				qsortForStrings(j, countRight, array, helpArray);
+				qsort(j, countRight, intArray, stringArray, helpArray, isIntSort);
 			}
 		}
 	}
