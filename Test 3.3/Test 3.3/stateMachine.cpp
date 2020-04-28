@@ -1,57 +1,34 @@
 #include "stateMachine.h"
+#include <ctype.h>
+
+enum calculatorStates { firstLetterState, restOfStringState };
 
 bool isCorrectString(char* inputString)
 {
-	int currentState = 0;
-	int i = 0;
+	calculatorStates currentState = firstLetterState;
+	int i = -1;
 
 	while (true)
 	{
+		i++;
 		char symbol = inputString[i];
 
 		switch (currentState)
 		{
-		case 0:
+		case firstLetterState:
 		{
-			if (symbol <= 'Z' && symbol >= 'A')
+			if ((symbol <= 'Z' && symbol >= 'A') || (symbol <= 'z' && symbol >= 'a'))
 			{
-				currentState = 1;
-				i++;
-				break;
-			}
-
-			if (symbol <= 'z' && symbol >= 'a')
-			{
-				currentState = 1;
-				i++;
+				currentState = restOfStringState;
 				break;
 			}
 
 			return false;
 		}
-		case 1:
+		case restOfStringState:
 		{
-			if (symbol <= 'Z' && symbol >= 'A')
+			if ((symbol <= 'Z' && symbol >= 'A') || (symbol <= 'z' && symbol >= 'z') || symbol == '_' || isdigit(symbol))
 			{
-				i++;
-				break;
-			}
-
-			if (symbol <= 'z' && symbol >= 'z')
-			{
-				i++;
-				break;
-			}
-
-			if (symbol <= '9' && symbol >= '0')
-			{
-				i++;
-				break;
-			}
-
-			if (symbol == '_')
-			{
-				i++;
 				break;
 			}
 
