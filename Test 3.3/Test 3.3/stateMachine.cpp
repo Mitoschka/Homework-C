@@ -17,7 +17,7 @@ bool isCorrectString(char* inputString)
 		{
 		case firstLetterState:
 		{
-			if ((symbol <= 'Z' && symbol >= 'A') || (symbol <= 'z' && symbol >= 'a'))
+			if (isalpha(symbol))
 			{
 				currentState = restOfStringState;
 				break;
@@ -27,7 +27,7 @@ bool isCorrectString(char* inputString)
 		}
 		case restOfStringState:
 		{
-			if ((symbol <= 'Z' && symbol >= 'A') || (symbol <= 'z' && symbol >= 'z') || symbol == '_' || isdigit(symbol))
+			if (isalpha(symbol) || symbol == '_' || isdigit(symbol))
 			{
 				break;
 			}
